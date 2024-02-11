@@ -13,19 +13,19 @@ int main(int argc, char* argv[]) {
 
     libusb_device_handle *mouse = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0046);
     if (!mouse) {
-        printf("Unable to open device\n");
+        fprintf(stderr,"Unable to open device\n");
         return 1;
     }
 
     libusb_device_handle *mousemat = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0c00);
     if (!mousemat) {
-        printf("Unable to open device\n");
+        fprintf(stderr,"Unable to open device\n");
         return 1;
     }
 
     libusb_device_handle *kbd = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0221);
     if (!kbd) {
-        printf("Unable to open device\n");
+        fprintf(stderr,"Unable to open device\n");
         return 1;
     }
 

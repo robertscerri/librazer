@@ -25,7 +25,7 @@ static void rz_data_from_report(const struct rz_report *report, unsigned char *d
     data[RZ_REPORT_LEN - 2] = rz_calculate_crc(data);
 }
 
-unsigned char rz_calculate_crc(const unsigned char *data) {
+static unsigned char rz_calculate_crc(const unsigned char *data) {
     unsigned char crc = 0;
 
     for (int i = 2; i < 88; i++) {
