@@ -29,6 +29,14 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+    // Claim the interface before performing any communication
+    if (libusb_claim_interface(kbd, 2) < 0) {
+        fprintf(stderr, "Failed to claim interface\n");
+        libusb_close(kbd);
+        libusb_exit(context);
+        return 1;
+    }
+
     rz_set_brightness(mouse, 0.3f);
     sleep(1);
     rz_set_brightness(mouse, 1.0f);
@@ -37,10 +45,12 @@ int main(int argc, char* argv[]) {
     sleep(1);
     rz_set_brightness(mousemat, 1.0f);
     sleep(1);
-    rz_set_brightness(kbd, 0.0f);
+    rz_set_brightness(kbd, 0.3f);
     sleep(1);
     rz_set_brightness(kbd, 1.0f);
     sleep(1);
+
+    libusb_release_interface(kbd, 2);
 
     libusb_close(mouse);
     libusb_close(mousemat);

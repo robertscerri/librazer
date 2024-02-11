@@ -1,33 +1,31 @@
 #include "rzcommon.h"
 
-#include <stdio.h>
-
 static void rz_data_from_report(const struct rz_report *report, unsigned char *data) {
-    unsigned char *data_start = data;
+    unsigned int data_offset = 0;
 
     const unsigned char NUM_PARAMS = report->params_len + 1; //params_len + 1 for sub_cmd
-    const unsigned char DATA_HDR[7] = {0x00, report->id, 0x00,  0x00, 0x00, NUM_PARAMS, 0x03}; //Last 0x03 reserved byte
+    const unsigned char DATA_HDR[7] = {0x00, report->id, 0x00,  0x00, 0x00, NUM_PARAMS, 0x03}; //Middle 0x00 and last 0x03 reserved byte
 
     const unsigned char DATA_CMD[2] = {report->cmd, report->sub_cmd};
 
-    memcpy(data, DATA_HDR, 7);
-    data += 7;
+    memcpy(data + data_offset, DATA_HDR, 7);
+    data_offset += 7;
 
-    memcpy(data, DATA_CMD, 2);
-    data += 2;
+    memcpy(data + data_offset, DATA_CMD, 2);
+    data_offset += 2;
 
-    memcpy(data, report->params, report->params_len);
-    data += report->params_len;
+    memcpy(data + data_offset, report->params, report->params_len);
+    data_offset += report->params_len;
 
-    while (data != data_start + ((RZ_REPORT_LEN + 1) * sizeof(char))) {
-        *data = 0;
-        data++;
+    while (data_offset < RZ_REPORT_LEN) {
+        data[data_offset] = 0;
+        data_offset++;
     }
 
-    data_start[RZ_REPORT_LEN - 2] = rz_calculate_crc(data_start);
+    data[RZ_REPORT_LEN - 2] = rz_calculate_crc(data);
 }
 
-unsigned char rz_calculate_crc(const uint8_t *data) {
+unsigned char rz_calculate_crc(const unsigned char *data) {
     unsigned char crc = 0;
 
     for (int i = 2; i < 88; i++) {
@@ -38,7 +36,7 @@ unsigned char rz_calculate_crc(const uint8_t *data) {
 }
 
 int rz_send_report(libusb_device_handle *dev, const struct rz_report *report) {
-    unsigned char * data[RZ_REPORT_LEN + 1];
+    unsigned char data[RZ_REPORT_LEN];
 
     rz_data_from_report(report, data);
 
@@ -52,9 +50,7 @@ int rz_send_report(libusb_device_handle *dev, const struct rz_report *report) {
         RZ_REPORT_LEN,
         2000);
 
-    if (ctrl == LIBUSB_ERROR_TIMEOUT) {
-        printf("Connection timed out\n");
-    }
+    return ctrl;
 }
 
 bool rz_set_brightness(libusb_device_handle *dev, const float brightness) {
