@@ -4,20 +4,20 @@ project(librazer C)
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/out)
 
-find_library(HIDAPI_LIBRARIES NAMES hidapi.lib PATHS ${CMAKE_SOURCE_DIR}/lib) #Static hidapi library
-find_path(HIDAPI_INCLUDE_DIRS NAMES hidapi/hidapi.h PATHS ${CMAKE_SOURCE_DIR}/include) #hidapi header files
+find_path(LIBUSB_INCLUDE_DIRS NAMES libusb/libusb.h PATHS ${CMAKE_SOURCE_DIR}/include) #libusb header files
+find_library(LIBUSB_LIBRARIES NAMES libusb-1.0.lib PATHS ${CMAKE_SOURCE_DIR}/lib) #Static libusb library
 
-message(STATUS "HIDAPI_INCLUDE_DIRS: ${HIDAPI_INCLUDE_DIRS}")
-message(STATUS "HIDAPI_LIBRARIES: ${HIDAPI_LIBRARIES}")
+message(STATUS "LIBUSB_INCLUDE_DIRS: ${LIBUSB_INCLUDE_DIRS}")
+message(STATUS "LIBUSB_LIBRARIES: ${LIBUSB_LIBRARIES}")
 
 add_library(razer SHARED rzcommon.c)
 
-target_include_directories(razer PRIVATE ${HIDAPI_INCLUDE_DIRS}) #hidapi header files
-target_link_libraries(razer PRIVATE ${HIDAPI_LIBRARIES}) #Static hidapi library
+target_include_directories(razer PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
+target_link_libraries(razer PRIVATE ${LIBUSB_LIBRARIES}) #Static libusb library
 
 add_executable(test test.c)
-target_include_directories(test PRIVATE ${HIDAPI_INCLUDE_DIRS}) #hidapi header files
-target_link_libraries(test PRIVATE razer ${HIDAPI_LIBRARIES})
+target_include_directories(test PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
+target_link_libraries(test PRIVATE razer ${LIBUSB_LIBRARIES})
 
 #Copy DLLs if changed
 add_custom_command(TARGET test POST_BUILD
