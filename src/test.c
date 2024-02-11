@@ -4,9 +4,6 @@
 
 #include "rzcommon.h"
 
-void constructDataFragment(uint8_t *data, uint8_t id, uint8_t cmd, uint8_t sub_cmd, const uint8_t *params, unsigned int params_length);
-uint8_t calculateCRC(const uint8_t *data);
-
 int main(int argc, char* argv[]) {
     libusb_context* context = NULL;
     libusb_init_context(&context, NULL, 0);

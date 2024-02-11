@@ -2,17 +2,24 @@
 #define RZCOMMON_H
 
 #include <libusb/libusb.h>
+#include <stdint.h>
 #include <stdbool.h>
 
 #define RZ_VENDOR_ID 0x1532
 
 #define RZ_REPORT_LEN 90
 
+struct rz_device {
+    libusb_device_handle *usb_dev;
+    unsigned int pid;
+    unsigned int wIndex;
+};
+
 struct rz_report {
-    unsigned char id;
-    unsigned char cmd;
-    unsigned char sub_cmd;
-    unsigned char *params;
+    uint8_t id;
+    uint8_t cmd;
+    uint8_t sub_cmd;
+    uint8_t *params;
     unsigned int params_len;
 };
 

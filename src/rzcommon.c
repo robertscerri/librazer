@@ -1,7 +1,7 @@
 #include "rzcommon.h"
 
-static unsigned char rz_calculate_crc(const unsigned char *data) {
-    unsigned char crc = 0;
+static uint8_t rz_calculate_crc(const uint8_t *data) {
+    uint8_t crc = 0;
 
     for (int i = 2; i < 88; i++) {
         crc ^= data[i];
@@ -10,13 +10,13 @@ static unsigned char rz_calculate_crc(const unsigned char *data) {
     return crc;
 }
 
-static void rz_data_from_report(const struct rz_report *report, unsigned char *data) {
+static void rz_data_from_report(const struct rz_report *report, uint8_t *data) {
     unsigned int data_offset = 0;
 
-    const unsigned char NUM_PARAMS = report->params_len + 1; //params_len + 1 for sub_cmd
-    const unsigned char DATA_HDR[7] = {0x00, report->id, 0x00,  0x00, 0x00, NUM_PARAMS, 0x03}; //Middle 0x00 and last 0x03 reserved byte
+    const uint8_t NUM_PARAMS = report->params_len + 1; //params_len + 1 for sub_cmd
+    const uint8_t DATA_HDR[7] = {0x00, report->id, 0x00,  0x00, 0x00, NUM_PARAMS, 0x03}; //Middle 0x00 and last 0x03 reserved byte
 
-    const unsigned char DATA_CMD[2] = {report->cmd, report->sub_cmd};
+    const uint8_t DATA_CMD[2] = {report->cmd, report->sub_cmd};
 
     memcpy(data + data_offset, DATA_HDR, 7);
     data_offset += 7;
@@ -36,7 +36,7 @@ static void rz_data_from_report(const struct rz_report *report, unsigned char *d
 }
 
 int rz_send_report(libusb_device_handle *dev, const struct rz_report *report) {
-    unsigned char data[RZ_REPORT_LEN];
+    uint8_t data[RZ_REPORT_LEN];
 
     rz_data_from_report(report, data);
 
@@ -54,7 +54,7 @@ int rz_send_report(libusb_device_handle *dev, const struct rz_report *report) {
 }
 
 bool rz_set_brightness(libusb_device_handle *dev, const float brightness) {
-    unsigned char PARAMS[2] = {0x05, (brightness * 255)};
+    uint8_t PARAMS[2] = {0x05, (brightness * 255)};
 
     struct rz_report report;
     report.id = 0x1f;
