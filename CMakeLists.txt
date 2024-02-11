@@ -10,15 +10,17 @@ find_path(HIDAPI_INCLUDE_DIRS NAMES hidapi/hidapi.h PATHS ${CMAKE_SOURCE_DIR}/in
 message(STATUS "HIDAPI_INCLUDE_DIRS: ${HIDAPI_INCLUDE_DIRS}")
 message(STATUS "HIDAPI_LIBRARIES: ${HIDAPI_LIBRARIES}")
 
-add_executable(test test.c)
+add_library(razer SHARED rzcommon.c)
 
+target_include_directories(razer PRIVATE ${HIDAPI_INCLUDE_DIRS}) #hidapi header files
+target_link_libraries(razer PRIVATE ${HIDAPI_LIBRARIES}) #Static hidapi library
+
+add_executable(test test.c)
 target_include_directories(test PRIVATE ${HIDAPI_INCLUDE_DIRS}) #hidapi header files
-target_link_libraries(test PRIVATE ${HIDAPI_LIBRARIES}) #Static hidapi library
+target_link_libraries(test PRIVATE razer ${HIDAPI_LIBRARIES})
 
 #Copy DLLs if changed
 add_custom_command(TARGET test POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
         "${PROJECT_SOURCE_DIR}/bin"
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
-
-#add_library(razer SHARED library.c)
