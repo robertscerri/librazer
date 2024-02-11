@@ -1,5 +1,15 @@
 #include "rzcommon.h"
 
+static unsigned char rz_calculate_crc(const unsigned char *data) {
+    unsigned char crc = 0;
+
+    for (int i = 2; i < 88; i++) {
+        crc ^= data[i];
+    }
+
+    return crc;
+}
+
 static void rz_data_from_report(const struct rz_report *report, unsigned char *data) {
     unsigned int data_offset = 0;
 
@@ -23,16 +33,6 @@ static void rz_data_from_report(const struct rz_report *report, unsigned char *d
     }
 
     data[RZ_REPORT_LEN - 2] = rz_calculate_crc(data);
-}
-
-static unsigned char rz_calculate_crc(const unsigned char *data) {
-    unsigned char crc = 0;
-
-    for (int i = 2; i < 88; i++) {
-        crc ^= data[i];
-    }
-
-    return crc;
 }
 
 int rz_send_report(libusb_device_handle *dev, const struct rz_report *report) {
