@@ -10,12 +10,12 @@ find_library(LIBUSB_LIBRARIES NAMES libusb-1.0.lib PATHS ${CMAKE_SOURCE_DIR}/lib
 message(STATUS "LIBUSB_INCLUDE_DIRS: ${LIBUSB_INCLUDE_DIRS}")
 message(STATUS "LIBUSB_LIBRARIES: ${LIBUSB_LIBRARIES}")
 
-add_library(razer SHARED rzcommon.c)
+add_library(razer SHARED src/rzcommon.c)
 
 target_include_directories(razer PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
 target_link_libraries(razer PRIVATE ${LIBUSB_LIBRARIES}) #Static libusb library
 
-add_executable(test test.c)
+add_executable(test src/test.c)
 target_include_directories(test PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
 target_link_libraries(test PRIVATE razer ${LIBUSB_LIBRARIES})
 
