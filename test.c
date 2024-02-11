@@ -11,19 +11,19 @@ int main(int argc, char* argv[]) {
     libusb_context* context = NULL;
     libusb_init_context(&context, NULL, 0);
 
-    libusb_device_handle *mouse = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0046);
+    libusb_device_handle *mouse = libusb_open_device_with_vid_pid(NULL, RZ_VENDOR_ID, 0x0046);
     if (!mouse) {
         fprintf(stderr,"Unable to open device\n");
         return 1;
     }
 
-    libusb_device_handle *mousemat = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0c00);
+    libusb_device_handle *mousemat = libusb_open_device_with_vid_pid(NULL, RZ_VENDOR_ID, 0x0c00);
     if (!mousemat) {
         fprintf(stderr,"Unable to open device\n");
         return 1;
     }
 
-    libusb_device_handle *kbd = libusb_open_device_with_vid_pid(NULL, 0x1532, 0x0221);
+    libusb_device_handle *kbd = libusb_open_device_with_vid_pid(NULL, RZ_VENDOR_ID, 0x0221);
     if (!kbd) {
         fprintf(stderr,"Unable to open device\n");
         return 1;
