@@ -11,8 +11,8 @@
 
 struct rz_device {
     libusb_device_handle *usb_dev;
-    unsigned int pid;
-    unsigned int wIndex;
+    uint16_t pid;
+    uint16_t w_index;
 };
 
 struct rz_report {
@@ -23,7 +23,10 @@ struct rz_report {
     unsigned int params_len;
 };
 
-int rz_send_transfer(libusb_device_handle *dev, const struct rz_report *request);
-bool rz_set_brightness(libusb_device_handle *dev, const float brightness);
+int rz_send_report(const struct rz_device *dev, const struct rz_report *report);
+struct rz_device rz_open_device(uint16_t pid);
+void rz_close_device(struct rz_device dev);
+
+bool rz_set_brightness(const struct rz_device *dev, float brightness);
 
 #endif //RZCOMMON_H
