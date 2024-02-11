@@ -1,2 +1,2 @@
 # librazer
-C library to control Razer devices.
+C library to interact with Razer devices.
