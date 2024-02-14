@@ -1,5 +1,6 @@
-#include "rzcommon.h"
 #include "chromacommon.h"
+
+#include "rzcommon.h"
 
 static void clampf(float *val, float min, float max) {
     if (*val > max) {
