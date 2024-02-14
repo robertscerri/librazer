@@ -37,7 +37,7 @@ void rz_close_device(struct rz_device dev);
 #define RZ_CHROMA_EFFECT_CLEAR_ROW 0x08
 
 bool rz_set_brightness(const struct rz_device *dev, float brightness);
-bool rz_set_effect(const struct rz_device *dev, const unsigned int effect_id, const uint8_t params, const unsigned int params_len);
+bool rz_set_effect(const struct rz_device *dev, const unsigned int effect_id, const uint8_t *params, const unsigned int params_len);
 bool rz_set_effect_static(const struct rz_device *dev, float r, float g, float b);
 
 #endif //RZCOMMON_H
