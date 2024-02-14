@@ -3,6 +3,7 @@
 #include <unistd.h>
 
 #include "rzcommon.h"
+#include "chromacommon.h"
 
 int main(void) {
     libusb_context* context = NULL;
@@ -20,21 +21,22 @@ int main(void) {
     rz_set_brightness(&mousemat, 1.0f);
     rz_set_brightness(&kbd, 1.0f);
     sleep(1);
-    rz_set_effect_static(&mouse, 255, 0, 0);
-    rz_set_effect_static(&mousemat, 255, 0, 0);
-    rz_set_effect_static(&kbd, 255, 0, 0);
+
+    struct rz_rgb red = {1.0f, 0, 0};
+    struct rz_rgb green = {0, 1.0f, 0};
+    struct rz_rgb blue = {0, 0, 1.0f};
+
+    rz_set_effect_static(&mouse, red);
+    rz_set_effect_static(&mousemat, red);
+    rz_set_effect_static(&kbd, red);
     sleep(4);
-    rz_set_effect_static(&mouse, 0, 255, 0);
-    rz_set_effect_static(&mousemat, 0, 255, 0);
-    rz_set_effect_static(&kbd, 0, 255, 0);
+    rz_set_effect_static(&mouse, green);
+    rz_set_effect_static(&mousemat, green);
+    rz_set_effect_static(&kbd, green);
     sleep(4);
-    rz_set_effect_static(&mouse, 0, 0, 255);
-    rz_set_effect_static(&mousemat, 0, 0, 255);
-    rz_set_effect_static(&kbd, 0, 0, 255);
-    sleep(4);
-    rz_set_effect(&mouse, RZ_CHROMA_EFFECT_SPECTRUM, NULL, 0);
-    rz_set_effect(&mousemat, RZ_CHROMA_EFFECT_SPECTRUM, NULL, 0);
-    rz_set_effect(&kbd, RZ_CHROMA_EFFECT_SPECTRUM, NULL, 0);
+    rz_set_effect_static(&mouse, blue);
+    rz_set_effect_static(&mousemat, blue);
+    rz_set_effect_static(&kbd, blue);
 
     rz_close_device(mouse);
     rz_close_device(mousemat);
