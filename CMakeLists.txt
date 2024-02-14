@@ -14,7 +14,9 @@ add_library(razer SHARED src/rzcommon.c
         src/rzcommon.h
         src/rzdevices.h
         src/usbcommon.c
-        src/usbcommon.h)
+        src/usbcommon.h
+        src/chromacommon.c
+        src/chromacommon.h)
 
 target_include_directories(razer PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
 target_link_libraries(razer PRIVATE ${LIBUSB_LIBRARIES}) #Static libusb library
