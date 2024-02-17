@@ -21,12 +21,12 @@ add_library(razer SHARED src/rzcommon.c
 target_include_directories(razer PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
 target_link_libraries(razer PRIVATE ${LIBUSB_LIBRARIES}) #Static libusb library
 
-add_executable(test src/test.c)
-target_include_directories(test PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
-target_link_libraries(test PRIVATE razer ${LIBUSB_LIBRARIES})
+add_executable(librazer_test src/test.c)
+target_include_directories(librazer_test PRIVATE ${LIBUSB_INCLUDE_DIRS}) #libusb header files
+target_link_libraries(librazer_test PRIVATE razer ${LIBUSB_LIBRARIES})
 
 #Copy DLLs if changed
-add_custom_command(TARGET test POST_BUILD
+add_custom_command(TARGET librazer_test POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
         "${PROJECT_SOURCE_DIR}/bin"
         ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
