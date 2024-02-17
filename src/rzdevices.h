@@ -93,12 +93,6 @@
 #define RZ_PID_DEATHADDER_V3_PRO_WIRELESS 0x00B7
 #define RZ_PID_VIPER_V3_HYPERSPEED 0x00B8
 
-// #define RAZER_MAMBA_ROW_LEN 15          // 0 => 14
-// #define RAZER_MAMBA_TE_ROW_LEN 16       // 0 => 15
-// #define RAZER_DIAMONDBACK_ROW_LEN 21    // 0 => 20
-
-// #define RAZER_MOUSE_MAX_DPI_STAGES 5
-
 //Keyboards
 #define RZ_PID_BLACKWIDOW_ULTIMATE_2012 0x010D
 #define RZ_PID_BLACKWIDOW_STEALTH_EDITION 0x010E
@@ -200,16 +194,6 @@
 
 // #define RZ_CHROMA_EFFECT_SET_KEYS 9 //update profile needs to be called after setting keys to reflect changes
 // #define RZ_CHROMA_EFFECT_RESET 10
-// #define RZ_CHROMA_EFFECT_UNKNOWN 11
-// #define RZ_CHROMA_EFFECT_UNKNOWN2 12
-// #define RZ_CHROMA_EFFECT_UNKNOWN3 13
-// #define RZ_CHROMA_EFFECT_UNKNOWN4 14
-
-// #define RAZER_BLACKWIDOW_CHROMA_ROW_LEN 0x16
-// #define RAZER_BLACKWIDOW_CHROMA_ROWS_NUM 6
-
-// #define RAZER_STEALTH_ROW_LEN 0x10
-// #define RAZER_STEALTH_ROWS_NUM 6
 
 //Kraken
 #define RZ_PID_KRAKEN_CLASSIC 0x0501
