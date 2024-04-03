@@ -17,9 +17,9 @@
 #define RZ_CHROMA_EFFECT_WAVE_DIRECTION_RIGHT 0x02
 
 struct rz_rgb {
-    float r;
-    float g;
-    float b;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
 };
 
 bool rz_set_brightness(const struct rz_device *dev, float brightness);

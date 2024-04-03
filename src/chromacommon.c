@@ -18,12 +18,6 @@ static void clamp_u8(uint8_t *val, uint8_t min, uint8_t max) {
     }
 }
 
-static uint8_t percentage_to_uint8(float val) {
-    clampf(&val, 0, 1);
-
-    return val * 255;
-}
-
 bool rz_set_brightness(const struct rz_device *dev, float brightness) {
     clampf(&brightness, 0, 1);
     uint8_t params[2] = {0x05, (brightness * 255)};
@@ -62,7 +56,7 @@ bool rz_set_effect_wave(const struct rz_device *dev, const uint8_t wave_directio
 bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct rz_rgb rgb) {
     clamp_u8(&speed, 0x01, 0x03);
 
-    const uint8_t params[4] = {speed, percentage_to_uint8(rgb.r), percentage_to_uint8(rgb.g), percentage_to_uint8(rgb.b)};
+    const uint8_t params[4] = {speed, rgb.r, rgb.g, rgb.b};
 
     return rz_set_effect(dev, RZ_CHROMA_EFFECT_REACTIVE, params, 4);
 }
@@ -72,7 +66,7 @@ bool rz_set_effect_spectrum(const struct rz_device *dev) {
 }
 
 bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb) {
-    const uint8_t params[3] = {percentage_to_uint8(rgb.r), percentage_to_uint8(rgb.g), percentage_to_uint8(rgb.b)};
+    const uint8_t params[3] = {rgb.r, rgb.g, rgb.b};
 
     return rz_set_effect(dev, RZ_CHROMA_EFFECT_STATIC, params, 3);
 }

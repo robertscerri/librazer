@@ -23,13 +23,13 @@ int main(int argc, char **argv) {
     rz_set_brightness(&dev, 1.0f);
     sleep(1);
 
-//    struct rz_rgb red = {1, 0, 0};
-//    struct rz_rgb green = {0, 1, 0};
-//    struct rz_rgb blue = {0, 0, 1};
-//    struct rz_rgb cyan = {0, 1, 1};
-//    struct rz_rgb magenta = {1, 0, 1};
-//    struct rz_rgb yellow = {1, 1, 0};
-//    struct rz_rgb white = {1, 1, 1};
+//    struct rz_rgb red = {0xff, 0, 0};
+//    struct rz_rgb green = {0, 0xff, 0};
+//    struct rz_rgb blue = {0, 0, 0xff};
+//    struct rz_rgb cyan = {0, 0xff, 0xff};
+//    struct rz_rgb magenta = {0xff, 0, 0xff};
+//    struct rz_rgb yellow = {0xff, 0xff, 0};
+//    struct rz_rgb white = {0xff, 0xff, 0xff};
 //
 //    rz_set_effect_static(&dev, red);
 //    sleep(4);
