@@ -23,33 +23,33 @@ int main(int argc, char **argv) {
     rz_set_brightness(&dev, 1.0f);
     sleep(1);
 
-    // struct rz_rgb red = {1, 0, 0};
-    // struct rz_rgb green = {0, 1, 0};
-    // struct rz_rgb blue = {0, 0, 1};
-    // struct rz_rgb cyan = {0, 1, 1};
-    // struct rz_rgb magenta = {1, 0, 1};
-    // struct rz_rgb yellow = {1, 1, 0};
-    // struct rz_rgb white = {1, 1, 1};
-    //
-    // rz_set_effect_static(&dev, red);
-    // sleep(4);
-    // rz_set_effect_static(&dev, green);
-    // sleep(4);
-    // rz_set_effect_static(&dev, blue);
-    // sleep(4);
-    // rz_set_effect_static(&dev, cyan);
-    // sleep(4);
-    // rz_set_effect_static(&dev, magenta);
-    // sleep(4);
-    // rz_set_effect_static(&dev, yellow);
-    // sleep(4);
-    // rz_set_effect_static(&dev, white);
-    // sleep(4);
-    // rz_set_effect_wave(&dev, RZ_CHROMA_EFFECT_WAVE_DIRECTION_LEFT);
-    // sleep(2);
-    // rz_set_effect_wave(&dev, RZ_CHROMA_EFFECT_WAVE_DIRECTION_RIGHT);
-    // sleep(2);
-    // rz_set_effect_spectrum(&dev);
+//    struct rz_rgb red = {1, 0, 0};
+//    struct rz_rgb green = {0, 1, 0};
+//    struct rz_rgb blue = {0, 0, 1};
+//    struct rz_rgb cyan = {0, 1, 1};
+//    struct rz_rgb magenta = {1, 0, 1};
+//    struct rz_rgb yellow = {1, 1, 0};
+//    struct rz_rgb white = {1, 1, 1};
+//
+//    rz_set_effect_static(&dev, red);
+//    sleep(4);
+//    rz_set_effect_static(&dev, green);
+//    sleep(4);
+//    rz_set_effect_static(&dev, blue);
+//    sleep(4);
+//    rz_set_effect_static(&dev, cyan);
+//    sleep(4);
+//    rz_set_effect_static(&dev, magenta);
+//    sleep(4);
+//    rz_set_effect_static(&dev, yellow);
+//    sleep(4);
+//    rz_set_effect_static(&dev, white);
+//    sleep(4);
+//    rz_set_effect_wave(&dev, RZ_CHROMA_EFFECT_WAVE_DIRECTION_LEFT);
+//    sleep(2);
+//    rz_set_effect_wave(&dev, RZ_CHROMA_EFFECT_WAVE_DIRECTION_RIGHT);
+//    sleep(2);
+//    rz_set_effect_spectrum(&dev);
 
     rz_close_device(dev);
 
