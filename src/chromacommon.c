@@ -73,10 +73,11 @@ bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb) {
 }
 
 bool rz_set_colour(const struct rz_device *dev, struct rz_rgb rgb) {
-    uint8_t params[49];
+    const int params_len = 46;
+    uint8_t params[params_len];
     params[0] = 0x0e;
 
-    for (int i = 1; i < 49; i+=3) {
+    for (int i = 1; i < params_len; i+=3) {
         params[i] = rgb.r;
         params[i+1] = rgb.g;
         params[i+2] = rgb.b;
@@ -87,7 +88,7 @@ bool rz_set_colour(const struct rz_device *dev, struct rz_rgb rgb) {
     report.cmd = 0x0c;
     report.sub_cmd = 0x00;
     report.params = (uint8_t *) params;
-    report.params_len = 49;
+    report.params_len = params_len;
 
     rz_send_report(dev, &report);
     usleep(50000);
