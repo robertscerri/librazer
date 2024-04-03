@@ -9,7 +9,7 @@
 #define RZ_CHROMA_EFFECT_REACTIVE 0x02
 //#define RZ_CHROMA_EFFECT_BREATH 0x03 //not implemented
 #define RZ_CHROMA_EFFECT_SPECTRUM 0x04
-//#define RZ_CHROMA_EFFECT_CUSTOM 0x05 // draw frame //not implemented
+#define RZ_CHROMA_EFFECT_CUSTOM 0x05 // draw frame //not implemented
 #define RZ_CHROMA_EFFECT_STATIC 0x06
 //#define RZ_CHROMA_EFFECT_CLEAR_ROW 0x08 //not implemented
 
@@ -28,5 +28,6 @@ bool rz_set_effect_wave(const struct rz_device *dev, const uint8_t wave_directio
 bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct rz_rgb rgb);
 bool rz_set_effect_spectrum(const struct rz_device *dev);
 bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb);
+bool rz_set_colour(const struct rz_device *dev, struct rz_rgb rgb);
 
 #endif //CHROMACOMMON_H
