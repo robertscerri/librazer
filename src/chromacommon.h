@@ -29,5 +29,6 @@ bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct r
 bool rz_set_effect_spectrum(const struct rz_device *dev);
 bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb);
 bool rz_set_colour(const struct rz_device *dev, struct rz_rgb rgb);
+bool rz_set_colour_kbd(const struct rz_device *dev, struct rz_rgb rgb);
 
 #endif //CHROMACOMMON_H

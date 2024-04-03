@@ -96,3 +96,32 @@ bool rz_set_colour(const struct rz_device *dev, struct rz_rgb rgb) {
 
     return 0;
 }
+
+bool rz_set_colour_kbd(const struct rz_device *dev, struct rz_rgb rgb) {
+    for (int i = 0; i <= 5; i++) {
+        const int params_len = 67;
+        uint8_t params[params_len];
+        params[0] = i;
+        params[1] = 0x00;
+        params[2] = 0x15;
+
+        for (int i = 3; i < params_len; i+=3) {
+            params[i] = rgb.r;
+            params[i+1] = rgb.g;
+            params[i+2] = rgb.b;
+        }
+
+        struct rz_report report;
+        report.id = 0x1f;
+        report.cmd = 0x0b;
+        report.sub_cmd = 0xff;
+        report.params = (uint8_t *) params;
+        report.params_len = params_len;
+
+        rz_send_report(dev, &report);
+        usleep(5000);
+    }
+    rz_set_effect(dev, RZ_CHROMA_EFFECT_CUSTOM, NULL, 0);
+
+    return 0;
+}
