@@ -7,7 +7,7 @@
 #define RZ_CHROMA_EFFECT_NONE 0x00
 #define RZ_CHROMA_EFFECT_WAVE 0x01
 #define RZ_CHROMA_EFFECT_REACTIVE 0x02
-//#define RZ_CHROMA_EFFECT_BREATH 0x03 //not implemented
+#define RZ_CHROMA_EFFECT_BREATH 0x03
 #define RZ_CHROMA_EFFECT_SPECTRUM 0x04
 #define RZ_CHROMA_EFFECT_CUSTOM 0x05 // draw frame
 #define RZ_CHROMA_EFFECT_STATIC 0x06
@@ -37,6 +37,9 @@ bool rz_set_brightness(const struct rz_device *dev, float brightness);
 bool rz_set_effect(const struct rz_device *dev, const unsigned int effect_id, const uint8_t *params, const unsigned int params_len);
 bool rz_set_effect_wave(const struct rz_device *dev, const uint8_t wave_direction);
 bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct rz_rgb rgb);
+bool rz_set_effect_breath(const struct rz_device *dev, struct rz_rgb rgb);
+bool rz_set_effect_breath_dual(const struct rz_device *dev, struct rz_rgb rgb1, struct rz_rgb rgb2);
+bool rz_set_effect_breath_random(const struct rz_device *dev);
 bool rz_set_effect_spectrum(const struct rz_device *dev);
 bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb);
 bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *matrix);

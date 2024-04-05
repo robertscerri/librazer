@@ -1,6 +1,5 @@
 #include "rzcommon.h"
 #include <unistd.h>
-#include <stdio.h>
 
 #include "chromacommon.h"
 
@@ -61,6 +60,24 @@ bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct r
     const uint8_t params[4] = {speed, rgb.r, rgb.g, rgb.b};
 
     return rz_set_effect(dev, RZ_CHROMA_EFFECT_REACTIVE, params, 4);
+}
+
+bool rz_set_effect_breath(const struct rz_device *dev, struct rz_rgb rgb) {
+    const uint8_t params[4] = {0x01, rgb.r, rgb.g, rgb.b};
+
+    return rz_set_effect(dev, RZ_CHROMA_EFFECT_BREATH, params, 4);
+}
+
+bool rz_set_effect_breath_dual(const struct rz_device *dev, struct rz_rgb rgb1, struct rz_rgb rgb2) {
+    const uint8_t params[7] = {0x02, rgb1.r, rgb1.g, rgb1.b, rgb2.r, rgb2.g, rgb2.b};
+
+    return rz_set_effect(dev, RZ_CHROMA_EFFECT_BREATH, params, 7);
+}
+
+bool rz_set_effect_breath_random(const struct rz_device *dev) {
+    const uint8_t params[7] = {0x03};
+
+    return rz_set_effect(dev, RZ_CHROMA_EFFECT_BREATH, params, 1);
 }
 
 bool rz_set_effect_spectrum(const struct rz_device *dev) {
