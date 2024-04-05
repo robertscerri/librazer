@@ -190,11 +190,6 @@
 #define RZ_PID_ORNATA_V3_X_ALT 0x02A2
 #define RZ_PID_BLACKWIDOW_V3_TK 0x0A24
 
-// #define RAZER_BLACKWIDOW_ULTIMATE_2016_EFFECT_STARLIGHT 0x19
-
-// #define RZ_CHROMA_EFFECT_SET_KEYS 9 //update profile needs to be called after setting keys to reflect changes
-// #define RZ_CHROMA_EFFECT_RESET 10
-
 //Kraken
 #define RZ_PID_KRAKEN_CLASSIC 0x0501
 #define RZ_PID_KRAKEN 0x0504

@@ -8,10 +8,18 @@
 
 #define RZ_REPORT_LEN 90
 
+enum rz_device_type {
+    MOUSE,
+    KEYBOARD,
+    KRAKEN,
+    ACCESSORY
+};
+
 struct rz_device {
     libusb_device_handle *usb_dev;
     uint16_t pid;
     uint16_t w_index;
+    enum rz_device_type type;
 };
 
 struct rz_report {
