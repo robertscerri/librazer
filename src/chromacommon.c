@@ -90,7 +90,7 @@ bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *mat
             params[2] = row.end;
 
             for (int j = 0; j < row_len; j++) {
-                int params_offset = 3 + (j * 3);
+                unsigned int params_offset = 3 + (j * 3);
                 params[params_offset] = row.rgb_values[j].r;
                 params[params_offset + 1] = row.rgb_values[j].g;
                 params[params_offset + 2] =  row.rgb_values[j].b;
@@ -107,10 +107,11 @@ bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *mat
 
             params[0] = row.end;
 
-            for (int j = 1 + (row.start * 3), k = 0; j < params_len; j+=3, k++) {
-                params[j] = row.rgb_values[k].r;
-                params[j + 1] = row.rgb_values[k].g;
-                params[j + 2] =  row.rgb_values[k].b;
+            for (int j = 0; j < row_len; j++) {
+                unsigned int params_offset = 1 + ((row.start + j) * 3);
+                params[params_offset] = row.rgb_values[j].r;
+                params[params_offset + 1] = row.rgb_values[j].g;
+                params[params_offset + 2] =  row.rgb_values[j].b;
             }
 
             report.cmd = 0x0c;
