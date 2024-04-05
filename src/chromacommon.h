@@ -39,8 +39,6 @@ bool rz_set_effect_wave(const struct rz_device *dev, const uint8_t wave_directio
 bool rz_set_effect_reactive(const struct rz_device *dev, uint8_t speed, struct rz_rgb rgb);
 bool rz_set_effect_spectrum(const struct rz_device *dev);
 bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb);
-bool rz_set_effect_custom_frame(const struct rz_device *dev, struct rz_rgb rgb, unsigned int row, uint8_t start, uint8_t end);
 bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *matrix);
-bool rz_set_colour_kbd(const struct rz_device *dev, struct rz_rgb rgb);
 
 #endif //CHROMACOMMON_H
