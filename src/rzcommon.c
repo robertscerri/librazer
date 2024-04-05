@@ -45,6 +45,11 @@ int rz_send_report(const struct rz_device *dev, const struct rz_report *report) 
 
     rz_data_from_report(report, data);
 
+    for (int i = 0; i < RZ_REPORT_LEN; i++) {
+        printf("%02x ", data[i]);
+    }
+    printf("\n\n");
+
     int ctrl = libusb_control_transfer(
         dev->usb_dev,
         0x21,

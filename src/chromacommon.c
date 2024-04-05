@@ -1,5 +1,6 @@
 #include "rzcommon.h"
 #include <unistd.h>
+#include <stdio.h>
 
 #include "chromacommon.h"
 
@@ -72,56 +73,57 @@ bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb) {
     return rz_set_effect(dev, RZ_CHROMA_EFFECT_STATIC, params, 3);
 }
 
-bool rz_set_effect_custom_frame(const struct rz_device *dev, struct rz_rgb rgb, uint8_t start, uint8_t end) {
-    const int params_len = 1 + ((end + 1) * 3);
-    uint8_t params[params_len];
-    params[0] = end;
-
-    for (int i = 1 + (start * 3); i < params_len; i+=3) {
-        params[i] = rgb.r;
-        params[i+1] = rgb.g;
-        params[i+2] = rgb.b;
-    }
-
-    struct rz_report report;
-    report.id = 0x1f;
-    report.cmd = 0x0c;
-    report.sub_cmd = start;
-    report.params = (uint8_t *) params;
-    report.params_len = params_len;
-
-    rz_send_report(dev, &report);
-    usleep(50000);
-    rz_set_effect(dev, RZ_CHROMA_EFFECT_CUSTOM, NULL, 0);
-
-    return true;
-}
-
-bool rz_set_colour_kbd(const struct rz_device *dev, struct rz_rgb rgb) {
-    for (int i = 0; i <= 5; i++) {
-        const int params_len = 67;
-        uint8_t params[params_len];
-        params[0] = i;
-        params[1] = 0x00;
-        params[2] = 0x15;
-
-        for (int i = 3; i < params_len; i+=3) {
-            params[i] = rgb.r;
-            params[i+1] = rgb.g;
-            params[i+2] = rgb.b;
-        }
+bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *matrix) {
+    for (int i = 0; i < matrix->row_count; i++) {
+        const struct rz_rgb_matrix_row row = matrix->rows[i];
+        const unsigned int row_len = (row.end + 1) - row.start;
 
         struct rz_report report;
         report.id = 0x1f;
-        report.cmd = 0x0b;
-        report.sub_cmd = 0xff;
-        report.params = (uint8_t *) params;
-        report.params_len = params_len;
 
-        rz_send_report(dev, &report);
+        if (dev->type == KEYBOARD) {
+            const unsigned int params_len = 3 + (row_len * 3);
+            uint8_t params[params_len];
+
+            params[0] = i;
+            params[1] = row.start;
+            params[2] = row.end;
+
+            for (int j = 0; j < row_len; j++) {
+                int params_offset = 3 + (j * 3);
+                params[params_offset] = row.rgb_values[j].r;
+                params[params_offset + 1] = row.rgb_values[j].g;
+                params[params_offset + 2] =  row.rgb_values[j].b;
+            }
+
+            report.cmd = 0x0b;
+            report.sub_cmd = 0xff;
+            report.params = (uint8_t *) params;
+            report.params_len = params_len;
+            rz_send_report(dev, &report);
+        } else {
+            const unsigned int params_len = 1 + ((row.end + 1) * 3);
+            uint8_t params[params_len];
+
+            params[0] = row.end;
+
+            for (int j = 1 + (row.start * 3), k = 0; j < params_len; j+=3, k++) {
+                params[j] = row.rgb_values[k].r;
+                params[j + 1] = row.rgb_values[k].g;
+                params[j + 2] =  row.rgb_values[k].b;
+            }
+
+            report.cmd = 0x0c;
+            report.sub_cmd = row.start;
+            report.params = (uint8_t *) params;
+            report.params_len = params_len;
+            rz_send_report(dev, &report);
+        }
+
         usleep(5000);
     }
+
     rz_set_effect(dev, RZ_CHROMA_EFFECT_CUSTOM, NULL, 0);
 
-    return 0;
+    return true;
 }
