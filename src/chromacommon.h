@@ -9,7 +9,7 @@
 #define RZ_CHROMA_EFFECT_REACTIVE 0x02
 //#define RZ_CHROMA_EFFECT_BREATH 0x03 //not implemented
 #define RZ_CHROMA_EFFECT_SPECTRUM 0x04
-#define RZ_CHROMA_EFFECT_CUSTOM 0x05 // draw frame //not implemented
+#define RZ_CHROMA_EFFECT_CUSTOM 0x05 // draw frame
 #define RZ_CHROMA_EFFECT_STATIC 0x06
 //#define RZ_CHROMA_EFFECT_CLEAR_ROW 0x08 //not implemented
 
