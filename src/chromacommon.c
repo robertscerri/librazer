@@ -92,7 +92,7 @@ bool rz_set_effect_static(const struct rz_device *dev, struct rz_rgb rgb) {
 
 bool rz_set_effect_custom(const struct rz_device *dev, struct rz_rgb_matrix *matrix) {
     for (int i = 0; i < matrix->row_count; i++) {
-        const struct rz_rgb_matrix_row row = matrix->rows[i];
+        const struct rz_rgb_row row = matrix->rows[i];
         const unsigned int row_len = (row.end + 1) - row.start;
 
         struct rz_report report;

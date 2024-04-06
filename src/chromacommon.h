@@ -22,7 +22,7 @@ struct rz_rgb {
     uint8_t b;
 };
 
-struct rz_rgb_matrix_row {
+struct rz_rgb_row {
     uint8_t start;
     uint8_t end;
     struct rz_rgb *rgb_values;
@@ -30,7 +30,7 @@ struct rz_rgb_matrix_row {
 
 struct rz_rgb_matrix {
     unsigned int row_count;
-    struct rz_rgb_matrix_row *rows;
+    struct rz_rgb_row *rows;
 };
 
 bool rz_set_brightness(const struct rz_device *dev, float brightness);
