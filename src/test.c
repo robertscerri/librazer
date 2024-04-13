@@ -10,7 +10,7 @@ int main(int argc, char **argv) {
     libusb_init_context(&context, NULL, 0);
 
     if (argc < 2) {
-        printf("Please specify a product ID");
+        fprintf(stderr, "Please specify a product ID\n");
         exit(1);
     }
 
