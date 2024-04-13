@@ -1,7 +1,7 @@
 #ifndef RZCOMMON_H
 #define RZCOMMON_H
 
-#include <libusb/libusb.h>
+#include <libusb-1.0/libusb.h>
 #include <stdint.h>
 
 #define RZ_VENDOR_ID 0x1532

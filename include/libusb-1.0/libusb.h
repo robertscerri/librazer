@@ -1,5 +1,5 @@
 /*
- * Public libusb header file
+ * Public libusb-1.0 header file
  * Copyright © 2001 Johannes Erdfelt <johannes@erdfelt.com>
  * Copyright © 2007-2008 Daniel Drake <dsd@gentoo.org>
  * Copyright © 2012 Pete Batard <pete@akeo.ie>
@@ -56,9 +56,9 @@ typedef SSIZE_T ssize_t;
 #endif /* __STDC_VERSION__ */
 
 /* 'interface' might be defined as a macro on Windows, so we need to
- * undefine it so as not to break the current libusb API, because
+ * undefine it so as not to break the current libusb-1.0 API, because
  * libusb_config_descriptor has an 'interface' member
- * As this can be problematic if you include windows.h after libusb.h
+ * As this can be problematic if you include windows.h after libusb-1.0.h
  * in your sources, we force windows.h to be included first. */
 #if defined(_WIN32) || defined(__CYGWIN__)
 #include <windows.h>
@@ -88,14 +88,14 @@ typedef SSIZE_T ssize_t;
 
 /** \def LIBUSB_CALL
  * \ingroup libusb_misc
- * libusb's Windows calling convention.
+ * libusb-1.0's Windows calling convention.
  *
  * Under Windows, the selection of available compilers and configurations
  * means that, unlike other platforms, there is not <em>one true calling
  * convention</em> (calling convention: the manner in which parameters are
  * passed to functions in the generated assembly code).
  *
- * Matching the Windows API itself, libusb uses the WINAPI convention (which
+ * Matching the Windows API itself, libusb-1.0 uses the WINAPI convention (which
  * translates to the <tt>stdcall</tt> convention) and guarantees that the
  * library is compiled in this way. The public header file also includes
  * appropriate annotations so that your own software will use the right
@@ -103,7 +103,7 @@ typedef SSIZE_T ssize_t;
  * your codebase.
  *
  * The one consideration that you must apply in your software is to mark
- * all functions which you use as libusb callbacks with this LIBUSB_CALL
+ * all functions which you use as libusb-1.0 callbacks with this LIBUSB_CALL
  * annotation, so that they too get compiled for the correct calling
  * convention.
  *
@@ -111,7 +111,7 @@ typedef SSIZE_T ssize_t;
  * means that you can apply it to your code without worrying about
  * cross-platform compatibility.
  */
-/* LIBUSB_CALL must be defined on both definition and declaration of libusb
+/* LIBUSB_CALL must be defined on both definition and declaration of libusb-1.0
  * functions. You'd think that declaration would be enough, but cygwin will
  * complain about conflicting types unless both are marked this way.
  * The placement of this macro is important too; it must appear after the
@@ -128,13 +128,13 @@ typedef SSIZE_T ssize_t;
 
 /** \def LIBUSB_API_VERSION
  * \ingroup libusb_misc
- * libusb's API version.
+ * libusb-1.0's API version.
  *
- * Since version 1.0.18, to help with feature detection, libusb defines
+ * Since version 1.0.18, to help with feature detection, libusb-1.0 defines
  * a LIBUSB_API_VERSION macro that gets increased every time there is a
  * significant change to the API, such as the introduction of a new call,
  * the definition of a new macro/enum member, or any other element that
- * libusb applications may want to detect at compilation time.
+ * libusb-1.0 applications may want to detect at compilation time.
  *
  * Between versions 1.0.13 and 1.0.17 (inclusive) the older spelling of
  * LIBUSBX_API_VERSION was used.
@@ -142,12 +142,12 @@ typedef SSIZE_T ssize_t;
  * The macro is typically used in an application as follows:
  * \code
  * #if defined(LIBUSB_API_VERSION) && (LIBUSB_API_VERSION >= 0x01001234)
- * // Use one of the newer features from the libusb API
+ * // Use one of the newer features from the libusb-1.0 API
  * #endif
  * \endcode
  *
  * Internally, LIBUSB_API_VERSION is defined as follows:
- * (libusb major << 24) | (libusb minor << 16) | (16 bit incremental)
+ * (libusb-1.0 major << 24) | (libusb-1.0 minor << 16) | (16 bit incremental)
  *
  * The incremental component has changed as follows:
  * <ul>
@@ -156,16 +156,16 @@ typedef SSIZE_T ssize_t;
  * <li>libusbx version 1.0.15: LIBUSBX_API_VERSION = 0x01000101
  * <li>libusbx version 1.0.16: LIBUSBX_API_VERSION = 0x01000102
  * <li>libusbx version 1.0.17: LIBUSBX_API_VERSION = 0x01000102
- * <li>libusb version 1.0.18: LIBUSB_API_VERSION = 0x01000102
- * <li>libusb version 1.0.19: LIBUSB_API_VERSION = 0x01000103
- * <li>libusb version 1.0.20: LIBUSB_API_VERSION = 0x01000104
- * <li>libusb version 1.0.21: LIBUSB_API_VERSION = 0x01000105
- * <li>libusb version 1.0.22: LIBUSB_API_VERSION = 0x01000106
- * <li>libusb version 1.0.23: LIBUSB_API_VERSION = 0x01000107
- * <li>libusb version 1.0.24: LIBUSB_API_VERSION = 0x01000108
- * <li>libusb version 1.0.25: LIBUSB_API_VERSION = 0x01000109
- * <li>libusb version 1.0.26: LIBUSB_API_VERSION = 0x01000109
- * <li>libusb version 1.0.27: LIBUSB_API_VERSION = 0x0100010A
+ * <li>libusb-1.0 version 1.0.18: LIBUSB_API_VERSION = 0x01000102
+ * <li>libusb-1.0 version 1.0.19: LIBUSB_API_VERSION = 0x01000103
+ * <li>libusb-1.0 version 1.0.20: LIBUSB_API_VERSION = 0x01000104
+ * <li>libusb-1.0 version 1.0.21: LIBUSB_API_VERSION = 0x01000105
+ * <li>libusb-1.0 version 1.0.22: LIBUSB_API_VERSION = 0x01000106
+ * <li>libusb-1.0 version 1.0.23: LIBUSB_API_VERSION = 0x01000107
+ * <li>libusb-1.0 version 1.0.24: LIBUSB_API_VERSION = 0x01000108
+ * <li>libusb-1.0 version 1.0.25: LIBUSB_API_VERSION = 0x01000109
+ * <li>libusb-1.0 version 1.0.26: LIBUSB_API_VERSION = 0x01000109
+ * <li>libusb-1.0 version 1.0.27: LIBUSB_API_VERSION = 0x0100010A
  * </ul>
  */
 #define LIBUSB_API_VERSION 0x0100010A
@@ -236,7 +236,7 @@ enum libusb_class_code {
 
 	/** Image class */
 	LIBUSB_CLASS_IMAGE = 0x06,
-	LIBUSB_CLASS_PTP = 0x06, /* legacy name from libusb-0.1 usb.h */
+	LIBUSB_CLASS_PTP = 0x06, /* legacy name from libusb-1.0-0.1 usb.h */
 
 	/** Printer class */
 	LIBUSB_CLASS_PRINTER = 0x07,
@@ -659,7 +659,7 @@ struct libusb_endpoint_descriptor {
 	/** For audio devices only: the address if the synch endpoint */
 	uint8_t  bSynchAddress;
 
-	/** Extra descriptors. If libusb encounters unknown endpoint descriptors,
+	/** Extra descriptors. If libusb-1.0 encounters unknown endpoint descriptors,
 	 * it will store them here, should you wish to parse them. */
 	const unsigned char *extra;
 
@@ -768,7 +768,7 @@ struct libusb_interface_descriptor {
 	 * by the bNumEndpoints field. */
 	const struct libusb_endpoint_descriptor *endpoint;
 
-	/** Extra descriptors. If libusb encounters unknown interface descriptors,
+	/** Extra descriptors. If libusb-1.0 encounters unknown interface descriptors,
 	 * it will store them here, should you wish to parse them. */
 	const unsigned char *extra;
 
@@ -828,7 +828,7 @@ struct libusb_config_descriptor {
 	 * this array is determined by the bNumInterfaces field. */
 	const struct libusb_interface *interface;
 
-	/** Extra descriptors. If libusb encounters unknown configuration
+	/** Extra descriptors. If libusb-1.0 encounters unknown configuration
 	 * descriptors, it will store them here, should you wish to parse them. */
 	const unsigned char *extra;
 
@@ -1070,14 +1070,14 @@ struct libusb_control_setup {
 
 #define LIBUSB_CONTROL_SETUP_SIZE (sizeof(struct libusb_control_setup))
 
-/* libusb */
+/* libusb-1.0 */
 
 struct libusb_context;
 struct libusb_device;
 struct libusb_device_handle;
 
 /** \ingroup libusb_lib
- * Structure providing the version of the libusb runtime
+ * Structure providing the version of the libusb-1.0 runtime
  */
 struct libusb_version {
 	/** Library major version. */
@@ -1100,16 +1100,16 @@ struct libusb_version {
 };
 
 /** \ingroup libusb_lib
- * Structure representing a libusb session. The concept of individual libusb
+ * Structure representing a libusb-1.0 session. The concept of individual libusb-1.0
  * sessions allows for your program to use two libraries (or dynamically
- * load two modules) which both independently use libusb. This will prevent
- * interference between the individual libusb users - for example
+ * load two modules) which both independently use libusb-1.0. This will prevent
+ * interference between the individual libusb-1.0 users - for example
  * libusb_set_option() will not affect the other user of the library, and
  * libusb_exit() will not destroy resources that the other user is still
  * using.
  *
  * Sessions are created by libusb_init_context() and destroyed through libusb_exit().
- * If your application is guaranteed to only ever include a single libusb
+ * If your application is guaranteed to only ever include a single libusb-1.0
  * user (i.e. you), you do not have to worry about contexts: pass NULL in
  * every function call where a context is required, and the default context
  * will be used. Note that libusb_set_option(NULL, ...) is special, and adds
@@ -1171,7 +1171,7 @@ enum libusb_speed {
 };
 
 /** \ingroup libusb_misc
- * Error codes. Most libusb functions return 0 on success or one of these
+ * Error codes. Most libusb-1.0 functions return 0 on success or one of these
  * codes on failure.
  * You can call libusb_error_name() to retrieve a string representation of an
  * error code or libusb_strerror() to get an end-user suitable description of
@@ -1316,7 +1316,7 @@ enum libusb_transfer_flags {
 	 * \ref LIBUSB_ERROR_NOT_SUPPORTED for every transfer where this
 	 * flag is set.
 	 *
-	 * Available since libusb-1.0.9.
+	 * Available since libusb-1.0-1.0.9.
 	 */
 	LIBUSB_TRANSFER_ADD_ZERO_PACKET = (1U << 3)
 };
@@ -1340,7 +1340,7 @@ struct libusb_transfer;
  * Asynchronous transfer callback function type. When submitting asynchronous
  * transfers, you pass a pointer to a callback function of this type via the
  * \ref libusb_transfer::callback "callback" member of the libusb_transfer
- * structure. libusb will call this function later, when the transfer has
+ * structure. libusb-1.0 will call this function later, when the transfer has
  * completed or failed. See \ref libusb_asyncio for more information.
  * \param transfer The libusb_transfer struct the callback function is being
  * notified about.
@@ -1415,7 +1415,7 @@ struct libusb_transfer {
 };
 
 /** \ingroup libusb_misc
- * Capabilities supported by an instance of libusb on the current running
+ * Capabilities supported by an instance of libusb-1.0 on the current running
  * platform. Test if the loaded library supports a given capability by calling
  * \ref libusb_has_capability().
  */
@@ -1428,7 +1428,7 @@ enum libusb_capability {
 
 	/** The library can access HID devices without requiring user intervention.
 	 * Note that before being able to actually access an HID device, you may
-	 * still have to call additional libusb functions such as
+	 * still have to call additional libusb-1.0 functions such as
 	 * \ref libusb_detach_kernel_driver(). */
 	LIBUSB_CAP_HAS_HID_ACCESS = 0x0100U,
 
@@ -1483,19 +1483,19 @@ enum libusb_option {
 	 * printed. If you choose to increase the message verbosity level, ensure
 	 * that your application does not close the stderr file descriptor.
 	 *
-	 * You are advised to use level LIBUSB_LOG_LEVEL_WARNING. libusb is conservative
+	 * You are advised to use level LIBUSB_LOG_LEVEL_WARNING. libusb-1.0 is conservative
 	 * with its message logging and most of the time, will only log messages that
 	 * explain error conditions and other oddities. This will help you debug
 	 * your software.
 	 *
-	 * If the LIBUSB_DEBUG environment variable was set when libusb was
+	 * If the LIBUSB_DEBUG environment variable was set when libusb-1.0 was
 	 * initialized, this option does nothing: the message verbosity is fixed
 	 * to the value in the environment variable.
 	 *
-	 * If libusb was compiled without any message logging, this option does
+	 * If libusb-1.0 was compiled without any message logging, this option does
 	 * nothing: you'll never get any messages.
 	 *
-	 * If libusb was compiled with verbose debug message logging, this option
+	 * If libusb-1.0 was compiled with verbose debug message logging, this option
 	 * does nothing: you'll always get messages from all levels.
 	 */
 	LIBUSB_OPTION_LOG_LEVEL = 0,
@@ -1511,7 +1511,7 @@ enum libusb_option {
 
 	/** Do not scan for devices
 	 *
-	 * With this option set, libusb will skip scanning devices in
+	 * With this option set, libusb-1.0 will skip scanning devices in
 	 * libusb_init_context().
 	 *
 	 * Hotplug functionality will also be deactivated.
@@ -1981,7 +1981,7 @@ static inline unsigned char *libusb_get_iso_packet_buffer(
 
 	/* oops..slight bug in the API. packet is an unsigned int, but we use
 	 * signed integers almost everywhere else. range-check and convert to
-	 * signed to avoid compiler warnings. FIXME for libusb-2. */
+	 * signed to avoid compiler warnings. FIXME for libusb-1.0-2. */
 	if (packet > INT_MAX)
 		return NULL;
 	_packet = (int) packet;
@@ -2021,7 +2021,7 @@ static inline unsigned char *libusb_get_iso_packet_buffer_simple(
 
 	/* oops..slight bug in the API. packet is an unsigned int, but we use
 	 * signed integers almost everywhere else. range-check and convert to
-	 * signed to avoid compiler warnings. FIXME for libusb-2. */
+	 * signed to avoid compiler warnings. FIXME for libusb-1.0-2. */
 	if (packet > INT_MAX)
 		return NULL;
 	_packet = (int) packet;
@@ -2214,7 +2214,7 @@ typedef enum {
  * This callback may be called by an internal event thread and as such it is
  * recommended the callback do minimal processing before returning.
  *
- * libusb will call this function later, when a matching event had happened on
+ * libusb-1.0 will call this function later, when a matching event had happened on
  * a matching device. See \ref libusb_hotplug for more information.
  *
  * It is safe to call either libusb_hotplug_register_callback() or
@@ -2242,7 +2242,7 @@ typedef int (LIBUSB_CALL *libusb_hotplug_callback_fn)(libusb_context *ctx,
  *
  * If the \ref LIBUSB_HOTPLUG_ENUMERATE is passed the callback will be
  * called with a \ref LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED for all devices
- * already plugged into the machine. Note that libusb modifies its internal
+ * already plugged into the machine. Note that libusb-1.0 modifies its internal
  * device list from a separate thread, while calling hotplug callbacks from
  * libusb_handle_events(), so it is possible for a device to already be present
  * on, or removed from, its internal device list, while the hotplug callbacks

@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include <libusb/libusb.h>
+#include <libusb-1.0/libusb.h>
 #include <unistd.h>
 
 #include "rzcommon.h"
