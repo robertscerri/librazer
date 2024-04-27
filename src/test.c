@@ -25,7 +25,20 @@ int main(int argc, char **argv) {
     const struct rz_rgb white = {0xff, 0xff, 0xff};
     const struct rz_rgb black = {0x00, 0x00, 0x00};
 
-//    rz_set_effect_custom(&dev, &testMatrix);
+    struct rz_rgb rowValues[9] = {red, red, red, green, green, green, blue, blue, blue};
+
+    struct rz_rgb_row row;
+    row.start = 1;
+    row.end = 9;
+    row.rgb_values = rowValues;
+
+    struct rz_rgb_row rows[1] = {row};
+
+    struct rz_rgb_matrix testMatrix;
+    testMatrix.row_count = 1;
+    testMatrix.rows = rows;
+
+    rz_set_effect_custom(&dev, &testMatrix);
 
     rz_close_device(dev);
 
