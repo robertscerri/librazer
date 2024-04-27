@@ -5,6 +5,8 @@
 #include "rzcommon.h"
 #include "chromacommon.h"
 
+void test_matrix(const struct rz_device *dev);
+
 int main(int argc, char **argv) {
     libusb_context* context = NULL;
     libusb_init_context(&context, NULL, 0);
@@ -25,6 +27,17 @@ int main(int argc, char **argv) {
     const struct rz_rgb white = {0xff, 0xff, 0xff};
     const struct rz_rgb black = {0x00, 0x00, 0x00};
 
+    test_matrix(&dev);
+
+    rz_close_device(dev);
+
+    libusb_exit(context);
+}
+
+void test_matrix(const struct rz_device *dev) {
+    const struct rz_rgb red = {0xff, 0, 0};
+    const struct rz_rgb green = {0, 0xff, 0};
+    const struct rz_rgb blue = {0, 0, 0xff};
     struct rz_rgb rowValues[9] = {red, red, red, green, green, green, blue, blue, blue};
 
     struct rz_rgb_row row;
@@ -38,9 +51,5 @@ int main(int argc, char **argv) {
     testMatrix.row_count = 1;
     testMatrix.rows = rows;
 
-    rz_set_effect_custom(&dev, &testMatrix);
-
-    rz_close_device(dev);
-
-    libusb_exit(context);
+    rz_set_effect_custom(dev, &testMatrix);
 }
