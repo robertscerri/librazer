@@ -1,4 +1,4 @@
-use crate::{chromacommon::rz_set_brightness, rzcommon::RzDevice};
+use chromacommon::RzChromaDevice;
 
 extern crate rusb;
 
@@ -7,13 +7,8 @@ mod chromacommon;
 mod rzdevices;
 
 fn main() {
-    let mut dev = RzDevice {
-        pid: 0,
-        usb_dev: None,
-        w_index: 0,
-        dev_type: rzcommon::RzDeviceType::Mouse
-    };
-    dev.open(0x0046);
+    let mut dev: RzChromaDevice = Default::default();
+    dev.rz_device.open(0x0046);
 
-    rz_set_brightness(&dev, 1.0);
+    dev.set_brightness(1.0);
 }
