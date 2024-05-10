@@ -16,6 +16,18 @@ pub struct RzChromaDevice {
     pub rz_device: RzDevice
 }
 
+pub struct RzRGB {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8
+}
+
+impl From<RzRGB> for Vec<u8> {
+    fn from(rgb: RzRGB) -> Self {
+        vec![rgb.r, rgb.g, rgb.b]
+    }
+}
+
 impl RzChromaDevice {
     pub fn set_brightness(&self, mut brightness: f32) -> bool {
         brightness = brightness.clamp(0.0, 1.0);
@@ -51,6 +63,30 @@ impl RzChromaDevice {
     
         return self.set_effect(RZ_CHROMA_EFFECT_WAVE, params);
     }
+
+    pub fn set_effect_reactive(&self, mut speed: u8, rgb: RzRGB) -> bool {
+        speed = speed.clamp(0x01, 0x03);
+
+        let mut params: Vec<u8> = vec![speed];
+        params.append(&mut rgb.into());
+
+        return self.set_effect(RZ_CHROMA_EFFECT_REACTIVE, params);
+    }
+
+    pub fn set_effect_breath(&self, rgb: RzRGB) -> bool {
+        let mut params: Vec<u8> = vec![0x01];
+        params.append(&mut rgb.into());
+
+        return self.set_effect(RZ_CHROMA_EFFECT_BREATH, params)
+    }
+
+    pub fn set_effect_breath_dual(&self, rgb1: RzRGB, rgb2: RzRGB) -> bool {
+        let mut params: Vec<u8> = vec![0x02];
+        params.append(&mut rgb1.into());
+        params.append(&mut rgb2.into());
+
+        return self.set_effect(RZ_CHROMA_EFFECT_BREATH, params)
+    }
     
     pub fn set_effect_breath_random(&self) -> bool {
         let params: Vec<u8> = vec![0x03];
@@ -60,5 +96,11 @@ impl RzChromaDevice {
     
     pub fn set_effect_spectrum(&self) -> bool {
         return self.set_effect(RZ_CHROMA_EFFECT_SPECTRUM, Vec::new());
+    }
+
+    pub fn set_effect_static(&self, rgb: RzRGB) -> bool {
+        let params = rgb.into();
+
+        return self.set_effect(RZ_CHROMA_EFFECT_STATIC, params);
     }
 }
