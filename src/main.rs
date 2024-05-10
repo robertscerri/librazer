@@ -18,4 +18,6 @@ fn main() {
     sleep(std::time::Duration::from_millis(500));
 
     dev.set_effect_spectrum();
+
+    dev.rz_device.close();
 }
