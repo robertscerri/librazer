@@ -11,8 +11,8 @@ const RZ_CHROMA_EFFECT_STATIC: u8 = 0x06;
 const RZ_CHROMA_EFFECT_WAVE_DIRECTION_LEFT: u8 = 0x01;
 const RZ_CHROMA_EFFECT_WAVE_DIRECTION_RIGHT: u8 = 0x02;
 
-pub fn rz_set_brightness(dev: &RzDevice, brightness: f32) -> bool {
-    brightness.clamp(0.0, 1.0);
+pub fn rz_set_brightness(dev: &RzDevice, mut brightness: f32) -> bool {
+    brightness = brightness.clamp(0.0, 1.0);
     let params: Vec<u8> = vec![0x05, (brightness * 255.0) as u8];
 
     let report = RzReport {

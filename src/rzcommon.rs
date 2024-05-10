@@ -1,16 +1,17 @@
-use std::ptr::null;
-
 use rusb::{DeviceHandle, GlobalContext};
 
 use crate::rzdevices::*;
 
-enum RzDeviceType {
-    MOUSE,
-    KEYBOARD,
-    KRAKEN,
-    ACCESSORY
+#[derive(Default)]
+pub enum RzDeviceType {
+    #[default]
+    Mouse,
+    Keyboard,
+    Kraken,
+    Accessory
 }
 
+#[derive(Default)]
 pub struct RzDevice {
     pub usb_dev: Option<DeviceHandle<GlobalContext>>,
     pub pid: u16,
@@ -60,20 +61,9 @@ impl From<&RzReport> for [u8; RZ_REPORT_LEN] {
     }
 }
 
-impl Default for RzDevice {
-    fn default() -> Self {
-        RzDevice {
-            pid: Default::default(),
-            usb_dev: None,
-            w_index: Default::default(),
-            dev_type: RzDeviceType::KEYBOARD
-        }
-    }
-}
-
 impl RzDevice {
     fn get_w_index(&self) -> u16 {
-        match(self.pid) {
+        match self.pid {
             RZ_PID_BLACKWIDOW_CHROMA_V2 => 0x02,
             _ => 0x00
         }
@@ -83,20 +73,30 @@ impl RzDevice {
         self.pid = pid;
         self.usb_dev = rusb::open_device_with_vid_pid(RZ_VENDOR_ID, pid);
         self.w_index = self.get_w_index();
-        self.dev_type = RzDeviceType::KEYBOARD; //TODO: Implement this
+        self.dev_type = RzDeviceType::Keyboard; //TODO: Implement this
 
-        self.usb_dev.claim_interface(self.w_index as u8);
+        if self.usb_dev.is_some() {
+            self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
+        }
     }
 
     pub fn close(&self) {
-        self.usb_dev.release_interface(self.w_index as u8);
+        if self.usb_dev.is_none() {
+            return;
+        }
+
+        self.usb_dev.as_ref().unwrap().release_interface(self.w_index as u8);
         self.close();
     }
 
     pub fn send_report(&self, report: &RzReport) -> bool {
-        let mut data: [u8; RZ_REPORT_LEN] = report.into();
+        if self.usb_dev.is_none() {
+            return false;
+        }
 
-        return self.usb_dev.write_control(
+        let data: [u8; RZ_REPORT_LEN] = report.into();
+
+        return self.usb_dev.as_ref().unwrap().write_control(
             0x21, 
             0x09, 
             0x300, 
