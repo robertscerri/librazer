@@ -1,6 +1,6 @@
-use rusb::{DeviceHandle, GlobalContext};
+use rusb::{Context, DeviceHandle};
 
-use crate::rzdevices::*;
+use crate::{rzdevices::*, usbcommon};
 
 #[derive(Default)]
 pub enum RzDeviceType {
@@ -13,7 +13,7 @@ pub enum RzDeviceType {
 
 #[derive(Default)]
 pub struct RzDevice {
-    pub usb_dev: Option<DeviceHandle<GlobalContext>>,
+    pub usb_dev: Option<DeviceHandle<Context>>,
     pub pid: u16,
     pub w_index: u16,
     pub dev_type: RzDeviceType
@@ -26,7 +26,7 @@ pub struct RzReport {
     pub params: Vec<u8>
 }
 
-const RZ_VENDOR_ID: u16 = 0x1532;
+pub const RZ_VENDOR_ID: u16 = 0x1532;
 const RZ_REPORT_LEN: usize = 90;
 
 fn rz_calculate_crc(data: &[u8]) -> u8 {
@@ -71,12 +71,17 @@ impl RzDevice {
 
     pub fn open(&mut self, pid: u16) {
         self.pid = pid;
-        self.usb_dev = rusb::open_device_with_vid_pid(RZ_VENDOR_ID, pid);
+        self.usb_dev = usbcommon::usb_get_dev_by_pid(pid);
         self.w_index = self.get_w_index();
         self.dev_type = RzDeviceType::Keyboard; //TODO: Implement this
 
         if self.usb_dev.is_some() {
-            self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
+            let res = self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
+
+            match res {
+                Ok(_) => {},
+                Err(e) => println!("Failed to claim interface: {:?}", e)
+            }
         }
     }
 
@@ -85,7 +90,13 @@ impl RzDevice {
             return;
         }
 
-        self.usb_dev.as_ref().unwrap().release_interface(self.w_index as u8);
+        let res = self.usb_dev.as_ref().unwrap().release_interface(self.w_index as u8);
+
+        match res {
+            Ok(_) => {},
+            Err(e) => println!("Failed to release interface: {:?}", e)
+        }
+
         self.close();
     }
 

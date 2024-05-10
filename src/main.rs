@@ -1,12 +1,13 @@
 use std::thread::sleep;
 
-use chromacommon::{RzChromaDevice, RzRGB};
+use chromacommon::RzChromaDevice;
 
 extern crate rusb;
 
 mod rzcommon;
 mod chromacommon;
 mod rzdevices;
+mod usbcommon;
 
 fn main() {
     let mut dev: RzChromaDevice = Default::default();
