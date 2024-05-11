@@ -2,7 +2,7 @@ use rusb::{Context, DeviceHandle};
 
 use crate::{rzdevices::*, usbcommon};
 
-#[derive(Default)]
+#[derive(Default, PartialEq, Eq)]
 pub enum RzDeviceType {
     #[default]
     Mouse,
@@ -19,6 +19,7 @@ pub struct RzDevice {
     pub dev_type: RzDeviceType
 }
 
+#[derive(Default)]
 pub struct RzReport {
     pub id: u8,
     pub cmd: u8,
