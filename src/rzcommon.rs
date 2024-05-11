@@ -301,29 +301,29 @@ impl RzDevice {
         self.w_index = self.get_w_index();
         self.dev_type = self.get_device_type();
 
-        if self.usb_dev.is_none() || self.w_index == 0 {
+        if self.usb_dev.is_none() {
             return;
         }
 
-        // let res = self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
+        let res = self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
 
-        // match res {
-        //     Ok(_) => {},
-        //     Err(e) => println!("Failed to claim interface: {:?}", e)
-        // }
+        match res {
+            Ok(_) => {},
+            Err(e) => println!("Failed to claim interface: {:?}", e)
+        }
     }
 
     pub fn close(&self) {
-        if self.usb_dev.is_none() || self.w_index == 0 {
+        if self.usb_dev.is_none() {
             return;
         }
 
-        // let res = self.usb_dev.as_ref().unwrap().release_interface(self.w_index as u8);
+        let res = self.usb_dev.as_ref().unwrap().release_interface(self.w_index as u8);
 
-        // match res {
-        //     Ok(_) => {},
-        //     Err(e) => println!("Failed to release interface: {:?}", e)
-        // }
+        match res {
+            Ok(_) => {},
+            Err(e) => println!("Failed to release interface: {:?}", e)
+        }
     }
 
     pub fn send_report(&self, report: &RzReport) -> bool {
