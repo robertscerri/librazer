@@ -305,7 +305,7 @@ impl RzDevice {
             return;
         }
 
-        //Trying to claim an interface on macOS gives an access error, however functions work as intended without claiming the interface.
+        //Trying to claim an interface on macOS gives an access error, however functions work as intended without claiming the interface on macOS.
         //To prevent access errors, the kernel driver must be detached, however this renders the device unusable.
         //This patch is placed here until a better solution is found.ß
         if (cfg!(target_os = "macos")) {
