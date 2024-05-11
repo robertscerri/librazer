@@ -319,8 +319,6 @@ impl RzDevice {
             Ok(_) => {},
             Err(e) => println!("Failed to release interface: {:?}", e)
         }
-
-        self.close();
     }
 
     pub fn send_report(&self, report: &RzReport) -> bool {

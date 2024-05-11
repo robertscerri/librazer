@@ -18,5 +18,6 @@ pub fn usb_get_dev_by_pid(pid: u16) -> Option<DeviceHandle<Context>> {
             Err(_) => continue
         }
     }
+    
     None
 }
