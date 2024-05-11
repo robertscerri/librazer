@@ -305,6 +305,13 @@ impl RzDevice {
             return;
         }
 
+        //Trying to claim an interface on macOS gives an access error, however functions work as intended without claiming the interface.
+        //To prevent access errors, the kernel driver must be detached, however this renders the device unusable.
+        //This patch is placed here until a better solution is found.ß
+        if (cfg!(target_os = "macos")) {
+            return;
+        }
+
         let res = self.usb_dev.as_ref().unwrap().claim_interface(self.w_index as u8);
 
         match res {
@@ -315,6 +322,11 @@ impl RzDevice {
 
     pub fn close(&self) {
         if self.usb_dev.is_none() {
+            return;
+        }
+
+        //Since for macOS targets no interfaces are claimed, none should thus be released.
+        if (cfg!(target_os = "macos")) {
             return;
         }
 
