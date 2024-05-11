@@ -1,9 +1,8 @@
 extern crate rusb;
 
-use std::{thread::sleep, time::Duration};
+use std::{env, thread::sleep, time::Duration};
 
 use chromacommon::{RzChromaDevice, RzMatrixRow, RzRGB, RZ_CHROMA_EFFECT_WAVE_DIRECTION_LEFT, RZ_CHROMA_EFFECT_WAVE_DIRECTION_RIGHT};
-use rzdevices::RZ_PID_BLACKWIDOW_CHROMA_V2;
 
 mod rzcommon;
 mod chromacommon;
@@ -11,8 +10,10 @@ mod rzdevices;
 mod usbcommon;
 
 fn main() {
+    let args: Vec<String> = env::args().skip(1).collect();
+
     let mut dev: RzChromaDevice = RzChromaDevice::default();
-    dev.rz_device.open(RZ_PID_BLACKWIDOW_CHROMA_V2);
+    dev.rz_device.open(u16::from_str_radix(args.get(0).unwrap(), 16).unwrap_or(0));
 
     demo_run(&dev);
 

@@ -1,3 +1,5 @@
+use std::process::exit;
+
 use rusb::{Context, DeviceHandle};
 
 use crate::{rzdevices::*, usbcommon};
@@ -288,7 +290,7 @@ impl RzDevice {
                 return RzDeviceType::Accessory,
             _ => {
                 println!("Unknown Razer device with PID: {}", self.pid);
-                return RzDeviceType::Mouse;
+                exit(1);
             }
         }
     }
