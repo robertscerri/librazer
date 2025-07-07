@@ -4,9 +4,8 @@ use crate::utils::errors::{Error, Result};
 
 #[derive(Debug)]
 pub struct USBDevice {
-    pub vendor_id: u16,
-    pub product_id: u16,
-
+    vendor_id: u16,
+    product_id: u16,
     handle: Option<DeviceHandle<Context>>,
 }
 
@@ -17,6 +16,14 @@ impl USBDevice {
             product_id,
             handle: None,
         }
+    }
+
+    pub fn vendor_id(&self) -> u16 {
+        self.vendor_id
+    }
+
+    pub fn product_id(&self) -> u16 {
+        self.product_id
     }
 
     pub fn open(&mut self) -> Result<()> {
