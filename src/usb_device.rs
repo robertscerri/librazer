@@ -1,3 +1,5 @@
+use std::time::Duration;
+
 use rusb::{Context, Device, DeviceHandle, UsbContext};
 
 use crate::utils::errors::{Error, Result};
@@ -43,6 +45,25 @@ impl USBDevice {
             Ok(())
         } else {
             Err(Error::DeviceNotFound {
+                vid: self.vendor_id,
+                pid: self.product_id,
+            })
+        }
+    }
+
+    pub fn write_control(
+        &self,
+        request_type: u8,
+        request: u8,
+        value: u16,
+        index: u16,
+        buf: &[u8],
+        timeout: Duration,
+    ) -> Result<usize> {
+        if let Some(handle) = &self.handle {
+            Ok(handle.write_control(request_type, request, value, index, buf, timeout)?)
+        } else {
+            Err(Error::DeviceNotOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
             })
