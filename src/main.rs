@@ -1,12 +1,5 @@
-use razer::{
-    razer_product::{RazerProduct, RAZER_VENDOR_ID},
-    usb_device::USBDevice,
-};
+use razer::{razer_device::RazerDevice, razer_product::RazerProduct};
 
 pub fn main() {
-    let mut device = USBDevice::new(
-        RAZER_VENDOR_ID,
-        RazerProduct::DeathAdderV3ProWireless as u16,
-    );
-    device.open().unwrap();
+    let device = RazerDevice::new(RazerProduct::DeathAdderV3ProWireless).unwrap();
 }
