@@ -1,3 +1,4 @@
-extern crate rusb;
+pub mod razer_product;
+pub mod usb_device;
 
-mod razer_device;
+mod utils;
