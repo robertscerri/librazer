@@ -13,13 +13,15 @@ pub struct RazerDevice {
 
 impl RazerDevice {
     pub fn new(product: RazerProduct) -> Result<Self> {
-        let mut usb_device = USBDevice::new(RAZER_VENDOR_ID, product as u16);
-        usb_device.open()?;
-
-        //TODO: Claim interface here, see legacy code for reference. Also remember to release all interfaces.
+        let usb_device = USBDevice::new(RAZER_VENDOR_ID, product as u16);
 
         let rz_device = RazerDevice { usb_device };
         Ok(rz_device)
+    }
+
+    pub fn open(&mut self) -> Result<()> {
+        //TODO: Claim interface here, see legacy code for reference. Also remember to release all interfaces.
+        self.usb_device.open()
     }
 
     fn send_report(&self, report: RazerReport) -> Result<()> {
