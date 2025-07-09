@@ -56,27 +56,4 @@ impl RzDevice {
             Err(e) => println!("Failed to release interface: {:?}", e),
         }
     }
-
-    pub fn send_report(&self, report: &RzReport) -> bool {
-        if self.usb_dev.is_none() {
-            return false;
-        }
-
-        let data: [u8; RZ_REPORT_LEN] = report.into();
-
-        return self
-            .usb_dev
-            .as_ref()
-            .unwrap()
-            .write_control(
-                0x21,
-                0x09,
-                0x300,
-                self.w_index,
-                &data,
-                std::time::Duration::from_millis(2000),
-            )
-            .unwrap()
-            == RZ_REPORT_LEN;
-    }
 }

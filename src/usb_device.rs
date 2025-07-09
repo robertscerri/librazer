@@ -38,16 +38,32 @@ impl USBDevice {
 
         let device = find_device_by_vid_pid(self.vendor_id, self.product_id)?;
 
-        if let Some(device) = device {
-            let handle = device.open()?;
-            self.handle = Some(handle);
+        match device {
+            Some(device) => {
+                let handle = device.open()?;
+                self.handle = Some(handle);
 
-            Ok(())
-        } else {
-            Err(Error::DeviceNotFound {
+                Ok(())
+            }
+            None => Err(Error::DeviceNotFound {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            })
+            }),
+        }
+    }
+
+    pub fn close(&mut self) -> Result<()> {
+        match &self.handle {
+            Some(handle) => {
+                //TODO: Write device close code here (release interfaces?)
+                self.handle = None;
+
+                Ok(())
+            }
+            None => Err(Error::DeviceNotOpen {
+                vid: self.vendor_id,
+                pid: self.product_id,
+            }),
         }
     }
 

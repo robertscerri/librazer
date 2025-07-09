@@ -20,8 +20,13 @@ impl RazerDevice {
     }
 
     pub fn open(&mut self) -> Result<()> {
-        //TODO: Claim interface here, see legacy code for reference. Also remember to release all interfaces.
+        //TODO: Claim interface here, see legacy code for reference.
         self.usb_device.open()
+    }
+
+    pub fn close(&mut self) -> Result<()> {
+        //TODO: Release interface here, see legacy code for reference.
+        self.usb_device.close()
     }
 
     fn send_report(&self, report: RazerReport) -> Result<()> {
