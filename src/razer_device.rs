@@ -1,4 +1,5 @@
 use crate::{
+    controllers::chroma_controller::ChromaController,
     razer_product::{RazerProduct, RAZER_VENDOR_ID},
     razer_report::{RazerReport, RZ_REPORT_LEN},
     usb_device::USBDevice,
@@ -7,15 +8,21 @@ use crate::{
 
 const CONTROL_REPORT_TIMEOUT: std::time::Duration = std::time::Duration::from_millis(2000);
 
-pub struct RazerDevice {
+pub struct RazerDevice<'a> {
     usb_device: USBDevice,
+
+    pub chroma_controller: Option<ChromaController<'a>>,
 }
 
-impl RazerDevice {
+impl RazerDevice<'_> {
     pub fn new(product: RazerProduct) -> Result<Self> {
         let usb_device = USBDevice::new(RAZER_VENDOR_ID, product as u16);
 
-        let rz_device = RazerDevice { usb_device };
+        //TODO: Replace with builder.
+        let rz_device = RazerDevice {
+            usb_device,
+            chroma_controller: None,
+        };
         Ok(rz_device)
     }
 
@@ -32,7 +39,7 @@ impl RazerDevice {
     fn send_report(&self, report: RazerReport) -> Result<()> {
         let data: [u8; RZ_REPORT_LEN] = report.into();
 
-        //TODO: Use more idiomatic constants
+        //TODO: Use more idiomatic constants.
         self.usb_device
             .write_control(0x21, 0x09, 0x300, 0x00, &data, CONTROL_REPORT_TIMEOUT)?;
 
