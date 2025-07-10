@@ -4,7 +4,8 @@ pub const RZ_REPORT_LEN: usize = 90;
 struct ReportHeader {
     status: u8,
     transaction_id: u8,
-    remaining_packets: u8,
+    remaining_packets: u16,
+    protocol_type: u8,
     data_size: u8,
     command_class: u8,
     command_id: u8,
@@ -17,10 +18,10 @@ pub struct RazerReport {
 }
 
 impl RazerReport {
-    fn new(
+    pub fn new(
         status: u8,
         transaction_id: u8,
-        remaining_packets: u8,
+        remaining_packets: u16,
         data_size: u8,
         command_class: u8,
         command_id: u8,
@@ -30,6 +31,7 @@ impl RazerReport {
             status,
             transaction_id,
             remaining_packets,
+            protocol_type: 0x00,
             data_size,
             command_class,
             command_id,
@@ -45,7 +47,12 @@ impl From<&RazerReport> for [u8; RZ_REPORT_LEN] {
 
         data[0] = report.header.status;
         data[1] = report.header.transaction_id;
-        data[2] = report.header.remaining_packets;
+
+        //Big Endian conversion
+        data[2] = ((report.header.remaining_packets >> 8) & 0xff) as u8;
+        data[3] = (report.header.remaining_packets & 0xff) as u8;
+
+        data[4] = report.header.protocol_type;
         data[5] = report.header.data_size;
         data[6] = report.header.command_class;
         data[7] = report.header.command_id;
@@ -69,9 +76,12 @@ impl From<[u8; RZ_REPORT_LEN]> for RazerReport {
         let mut arguments: [u8; 80] = [0; 80];
         arguments.copy_from_slice(&data[8..(RZ_REPORT_LEN - 2)]);
 
-        RazerReport::new(
-            data[0], data[1], data[2], data[5], data[6], data[7], arguments,
-        )
+        //TODO: Complete back conversion from byte array to RazerReport
+        todo!();
+
+        // RazerReport::new(
+        //     data[0], data[1], data[2], data[5], data[6], data[7], arguments,
+        // )
     }
 }
 
