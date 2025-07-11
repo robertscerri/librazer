@@ -1,6 +1,6 @@
 use crate::{
     device::razer_device::{DeathAdderV3ProWireless, RazerDevice},
-    protocol::razer_report::RazerReport,
+    protocol::{razer_report::RazerReport, status::Status},
     utils::errors::Result,
 };
 
@@ -8,19 +8,15 @@ pub trait Rechargable: RazerDevice {
     fn get_battery_level(&mut self) -> Result<f32> {
         let params: Vec<u8> = vec![0x00, 0x00];
 
-        //Try to get rid of this slice manipulation
-        let mut argument_slice: [u8; 80] = [0; 80];
-        argument_slice[0..params.len()].copy_from_slice(&params);
-
         //TODO: Use more idiomatic constants
         let report = RazerReport::new(
-            0x00,
+            Status::NewCommand,
             0x1f,
             0x00,
             params.len() as u8,
             0x07,
             0x80,
-            argument_slice,
+            params,
         );
 
         self.send_report(report)?;

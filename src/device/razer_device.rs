@@ -40,7 +40,7 @@ pub trait RazerDevice {
         let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
         data[0..RZ_REPORT_LEN].copy_from_slice(buf.as_slice());
 
-        let report = data.into();
+        let report = data.try_into()?;
 
         Ok(report)
     }

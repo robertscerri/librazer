@@ -2,7 +2,7 @@ use std::time::Duration;
 
 use rusb::{Context, Device, DeviceHandle, UsbContext};
 
-use crate::utils::errors::{Error, Result};
+use crate::utils::errors::{Result, USBError};
 
 #[derive(Debug)]
 pub struct USBDevice {
@@ -30,10 +30,11 @@ impl USBDevice {
 
     pub fn open(&mut self) -> Result<()> {
         if self.handle.is_some() {
-            return Err(Error::DeviceAlreadyOpen {
+            return Err(USBError::DeviceAlreadyOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            });
+            }
+            .into());
         }
 
         let device = find_device_by_vid_pid(self.vendor_id, self.product_id)?;
@@ -45,10 +46,11 @@ impl USBDevice {
 
                 Ok(())
             }
-            None => Err(Error::DeviceNotFound {
+            None => Err(USBError::DeviceNotFound {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            }),
+            }
+            .into()),
         }
     }
 
@@ -60,10 +62,11 @@ impl USBDevice {
 
                 Ok(())
             }
-            None => Err(Error::DeviceNotOpen {
+            None => Err(USBError::DeviceNotOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            }),
+            }
+            .into()),
         }
     }
 
@@ -79,10 +82,11 @@ impl USBDevice {
         if let Some(handle) = &self.handle {
             Ok(handle.write_control(request_type, request, value, index, buf, timeout)?)
         } else {
-            Err(Error::DeviceNotOpen {
+            Err(USBError::DeviceNotOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            })
+            }
+            .into())
         }
     }
 
@@ -103,10 +107,11 @@ impl USBDevice {
 
             Ok(buf.to_vec())
         } else {
-            Err(Error::DeviceNotOpen {
+            Err(USBError::DeviceNotOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
-            })
+            }
+            .into())
         }
     }
 }

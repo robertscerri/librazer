@@ -19,7 +19,7 @@ pub struct ReportHeader {
 #[derive(Debug)]
 pub struct RazerReport {
     pub header: ReportHeader,
-    pub arguments: [u8; 80],
+    pub arguments: Vec<u8>,
 }
 
 //TODO: Use more idiomatic constants
@@ -31,8 +31,11 @@ impl RazerReport {
         data_size: u8,
         command_class: u8,
         command_id: u8,
-        arguments: [u8; 80],
+        arguments: Vec<u8>,
     ) -> Self {
+        //Truncate more than 80 elements to comply with RZ_REPORT_LEN
+        let arguments = arguments[0..80].to_vec();
+
         let header = ReportHeader {
             status,
             transaction_id,
@@ -55,15 +58,18 @@ impl From<&RazerReport> for [u8; RZ_REPORT_LEN] {
         data[1] = report.header.transaction_id;
 
         //Big Endian conversion
-        data[2] = ((report.header.remaining_packets >> 8) & 0xff) as u8;
-        data[3] = (report.header.remaining_packets & 0xff) as u8;
+        let remaining_packets_be = u16::to_be_bytes(report.header.remaining_packets);
+        data[2] = remaining_packets_be[0];
+        data[3] = remaining_packets_be[1];
 
         data[4] = report.header.protocol_type;
         data[5] = report.header.data_size;
         data[6] = report.header.command_class;
         data[7] = report.header.command_id;
 
-        data[8..(8 + report.arguments.len())].copy_from_slice(&report.arguments);
+        //TODO: Any way to make this cleaner?
+        let arguments_dest = &mut data[8..(8 + report.arguments.len())];
+        arguments_dest.copy_from_slice(&report.arguments);
 
         data[RZ_REPORT_LEN - 2] = compute_crc(&data);
 
@@ -81,9 +87,6 @@ impl TryFrom<[u8; RZ_REPORT_LEN]> for RazerReport {
     type Error = Error;
 
     fn try_from(data: [u8; RZ_REPORT_LEN]) -> Result<Self> {
-        let mut arguments: [u8; 80] = [0; 80];
-        arguments.copy_from_slice(&data[8..(RZ_REPORT_LEN - 2)]);
-
         //TODO: Protocol type
         Ok(RazerReport::new(
             data[0].try_into()?,
@@ -92,7 +95,7 @@ impl TryFrom<[u8; RZ_REPORT_LEN]> for RazerReport {
             data[5],
             data[6],
             data[7],
-            arguments,
+            data[8..(RZ_REPORT_LEN - 2)].to_vec(),
         ))
     }
 }
