@@ -1,10 +1,14 @@
 use razer::{
-    capabilities::chroma_capable::ChromaCapable,
-    razer_device::{Firefly, RazerDevice},
+    capabilities::{chroma_capable::ChromaCapable, rechargable::Rechargable},
+    razer_device::{DeathAdderV3ProWireless, Firefly, RazerDevice},
 };
 
 pub fn main() {
-    let mut device = Firefly::new().unwrap();
+    read_deathadder_battery();
+}
+
+fn dim_brightness_firefly() {
+    let mut device = Firefly::new();
     device.open().unwrap();
 
     println!(
@@ -18,4 +22,20 @@ pub fn main() {
 
     device.close().unwrap();
     println!("Closed connection with Razer Firefly");
+}
+
+fn read_deathadder_battery() {
+    let mut mouse = DeathAdderV3ProWireless::new();
+    mouse.open().unwrap();
+
+    println!(
+        "Connected to Razer DeathAdder V3 Pro Wireless (PID: {:#06X})",
+        mouse.usb_device().product_id()
+    );
+
+    let battery = mouse.get_battery_level().unwrap();
+    println!("Battery at: {:.2}%", battery * 100.0);
+
+    mouse.close().unwrap();
+    println!("Closed connection with Razer DeathAdder V3 Pro Wireless");
 }

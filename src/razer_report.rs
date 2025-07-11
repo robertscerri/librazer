@@ -1,7 +1,7 @@
 pub const RZ_REPORT_LEN: usize = 90;
 
 #[derive(Debug)]
-struct ReportHeader {
+pub struct ReportHeader {
     status: u8,
     transaction_id: u8,
     remaining_packets: u16,
@@ -17,6 +17,7 @@ pub struct RazerReport {
     pub arguments: [u8; 80],
 }
 
+//TODO: Use more idiomatic constants
 impl RazerReport {
     pub fn new(
         status: u8,
