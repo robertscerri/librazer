@@ -1,6 +1,6 @@
 use razer::{
     capabilities::{chroma_capable::ChromaCapable, rechargable::Rechargable},
-    razer_device::{DeathAdderV3ProWireless, Firefly, RazerDevice},
+    device::razer_device::{DeathAdderV3ProWireless, Firefly, RazerDevice},
 };
 
 pub fn main() {

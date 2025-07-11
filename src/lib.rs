@@ -1,6 +1,5 @@
 pub mod capabilities;
-pub mod razer_device;
+pub mod device;
 
-mod razer_report;
-mod usb_device;
+mod protocol;
 mod utils;

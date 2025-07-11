@@ -1,6 +1,6 @@
 use crate::{
-    razer_device::{DeathAdderV3ProWireless, RazerDevice},
-    razer_report::RazerReport,
+    device::razer_device::{DeathAdderV3ProWireless, RazerDevice},
+    protocol::razer_report::RazerReport,
     utils::errors::Result,
 };
 
@@ -35,6 +35,8 @@ pub trait Rechargable: RazerDevice {
 
         Ok(normalised_percentage)
     }
+
+    //TODO: Get charging status
 }
 
 impl Rechargable for DeathAdderV3ProWireless {}

@@ -1,6 +1,6 @@
 use crate::{
-    razer_report::{RazerReport, RZ_REPORT_LEN},
-    usb_device::USBDevice,
+    device::usb_device::USBDevice,
+    protocol::razer_report::{RazerReport, RZ_REPORT_LEN},
     utils::errors::Result,
 };
 

@@ -1,6 +1,6 @@
 use crate::{
-    razer_device::{Firefly, RazerDevice},
-    razer_report::RazerReport,
+    device::razer_device::{Firefly, RazerDevice},
+    protocol::razer_report::RazerReport,
     utils::errors::Result,
 };
 
