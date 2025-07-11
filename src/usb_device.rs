@@ -2,10 +2,7 @@ use std::time::Duration;
 
 use rusb::{Context, Device, DeviceHandle, UsbContext};
 
-use crate::{
-    usb_device,
-    utils::errors::{Error, Result},
-};
+use crate::utils::errors::{Error, Result};
 
 #[derive(Debug)]
 pub struct USBDevice {
@@ -57,7 +54,7 @@ impl USBDevice {
 
     pub fn close(&mut self) -> Result<()> {
         match &self.handle {
-            Some(handle) => {
+            Some(_) => {
                 //TODO: Write device close code here (release interfaces?)
                 self.handle = None;
 
