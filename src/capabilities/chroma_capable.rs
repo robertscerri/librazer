@@ -9,15 +9,7 @@ pub trait ChromaCapable: RazerDevice {
         let brightness = brightness.clamp(0.0, 1.0);
         let params: Vec<u8> = vec![0x01, 0x05, (brightness * 255.0) as u8]; //TODO: Replace constants with idomatic values
 
-        let report = RazerReport::new(
-            Status::NewCommand,
-            0xff,
-            0x00,
-            params.len() as u8,
-            0x03,
-            0x03,
-            params,
-        );
+        let report = RazerReport::new(Status::NewCommand, 0xff, 0x00, 0x03, 0x03, params);
 
         self.send_report(report)
     }

@@ -28,7 +28,6 @@ impl RazerReport {
         status: Status,
         transaction_id: u8,
         remaining_packets: u16,
-        data_size: u8,
         command_class: u8,
         command_id: u8,
         arguments: Vec<u8>,
@@ -41,7 +40,7 @@ impl RazerReport {
             transaction_id,
             remaining_packets,
             protocol_type: 0x00,
-            data_size,
+            data_size: arguments.len() as u8,
             command_class,
             command_id,
         };
@@ -87,15 +86,17 @@ impl TryFrom<[u8; RZ_REPORT_LEN]> for RazerReport {
     type Error = Error;
 
     fn try_from(data: [u8; RZ_REPORT_LEN]) -> Result<Self> {
+        let args_end = 8 + data[5] as usize;
+        let arguments = data[8..args_end].to_vec();
+
         //TODO: Protocol type
         Ok(RazerReport::new(
             data[0].try_into()?,
             data[1],
             u16::from_be_bytes([data[2], data[3]]),
-            data[5],
             data[6],
             data[7],
-            data[8..(RZ_REPORT_LEN - 2)].to_vec(),
+            arguments,
         ))
     }
 }

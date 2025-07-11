@@ -9,15 +9,7 @@ pub trait Rechargable: RazerDevice {
         let params: Vec<u8> = vec![0x00, 0x00];
 
         //TODO: Use more idiomatic constants
-        let report = RazerReport::new(
-            Status::NewCommand,
-            0x1f,
-            0x00,
-            params.len() as u8,
-            0x07,
-            0x80,
-            params,
-        );
+        let report = RazerReport::new(Status::NewCommand, 0x1f, 0x00, 0x07, 0x80, params);
 
         self.send_report(report)?;
 
