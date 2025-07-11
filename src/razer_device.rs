@@ -29,6 +29,21 @@ pub trait RazerDevice {
 
         Ok(())
     }
+
+    fn read_report(&mut self) -> Result<RazerReport> {
+        //TODO: Use more idiomatic constants.
+        let buf: Vec<u8> =
+            self.usb_device()
+                .read_control(0xa1, 0x01, 0x300, 0x00, CONTROL_REPORT_TIMEOUT)?;
+
+        //TODO: Sort out buffer messiness
+        let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
+        data[0..RZ_REPORT_LEN].copy_from_slice(buf.as_slice());
+
+        let report = data.into();
+
+        Ok(report)
+    }
 }
 
 //Device definitions
@@ -44,13 +59,19 @@ macro_rules! define_razer_device {
             }
 
             impl $name {
-                pub fn new() -> Result<Self> {
+                pub fn new() -> Self {
                     let usb_device = USBDevice::new(
                         RAZER_VENDOR_ID,
                         $product_id,
                     );
 
-                    Ok($name { usb_device })
+                    $name { usb_device }
+                }
+            }
+
+            impl Default for $name {
+                fn default() -> Self {
+                    $name::new()
                 }
             }
 

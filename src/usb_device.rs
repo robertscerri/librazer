@@ -2,7 +2,10 @@ use std::time::Duration;
 
 use rusb::{Context, Device, DeviceHandle, UsbContext};
 
-use crate::utils::errors::{Error, Result};
+use crate::{
+    usb_device,
+    utils::errors::{Error, Result},
+};
 
 #[derive(Debug)]
 pub struct USBDevice {
@@ -78,6 +81,30 @@ impl USBDevice {
     ) -> Result<usize> {
         if let Some(handle) = &self.handle {
             Ok(handle.write_control(request_type, request, value, index, buf, timeout)?)
+        } else {
+            Err(Error::DeviceNotOpen {
+                vid: self.vendor_id,
+                pid: self.product_id,
+            })
+        }
+    }
+
+    pub fn read_control(
+        &self,
+        request_type: u8,
+        request: u8,
+        value: u16,
+        index: u16,
+        timeout: Duration,
+    ) -> Result<Vec<u8>> {
+        //TODO: Sort out buf size shenanigans
+        if let Some(handle) = &self.handle {
+            let mut buf: [u8; 90] = [0; 90];
+
+            let _read_len =
+                handle.read_control(request_type, request, value, index, &mut buf, timeout)?;
+
+            Ok(buf.to_vec())
         } else {
             Err(Error::DeviceNotOpen {
                 vid: self.vendor_id,

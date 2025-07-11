@@ -13,8 +13,8 @@ struct ReportHeader {
 
 #[derive(Debug)]
 pub struct RazerReport {
-    header: ReportHeader,
-    arguments: [u8; 80],
+    pub header: ReportHeader,
+    pub arguments: [u8; 80],
 }
 
 impl RazerReport {
@@ -76,12 +76,16 @@ impl From<[u8; RZ_REPORT_LEN]> for RazerReport {
         let mut arguments: [u8; 80] = [0; 80];
         arguments.copy_from_slice(&data[8..(RZ_REPORT_LEN - 2)]);
 
-        //TODO: Complete back conversion from byte array to RazerReport
-        todo!();
-
-        // RazerReport::new(
-        //     data[0], data[1], data[2], data[5], data[6], data[7], arguments,
-        // )
+        //TODO: Protocol type
+        RazerReport::new(
+            data[0],
+            data[1],
+            u16::from_be_bytes([data[2], data[3]]),
+            data[5],
+            data[6],
+            data[7],
+            arguments,
+        )
     }
 }
 
