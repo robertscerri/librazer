@@ -26,7 +26,6 @@ pub trait Rechargable: RazerDevice {
         std::thread::sleep(std::time::Duration::from_micros(3100));
 
         let report = self.read_report()?;
-        println!("{report:?}");
         let normalised_percentage = report.arguments[1] as f32 / u8::MAX as f32;
 
         Ok(normalised_percentage)

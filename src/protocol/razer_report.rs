@@ -34,7 +34,7 @@ impl RazerReport {
         arguments: Vec<u8>,
     ) -> Self {
         //Truncate more than 80 elements to comply with RZ_REPORT_LEN
-        let arguments = arguments[0..80].to_vec();
+        let arguments = arguments[0..arguments.len().min(80)].to_vec();
 
         let header = ReportHeader {
             status,
@@ -54,7 +54,7 @@ impl From<&RazerReport> for [u8; RZ_REPORT_LEN] {
     fn from(report: &RazerReport) -> Self {
         let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
 
-        data[0] = report.header.status.as_u8();
+        data[0] = report.header.status as u8;
         data[1] = report.header.transaction_id;
 
         //Big Endian conversion

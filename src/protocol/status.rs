@@ -1,6 +1,7 @@
 use crate::utils::errors::{Error, ProtcolError, Result};
 
-#[derive(Debug)]
+#[repr(u8)]
+#[derive(Debug, Copy, Clone)]
 pub enum Status {
     NewCommand,
     Busy,
@@ -8,19 +9,6 @@ pub enum Status {
     Failure,
     NoResponseOrTimeout,
     NotSupported,
-}
-
-impl Status {
-    pub fn as_u8(&self) -> u8 {
-        match self {
-            Status::NewCommand => 0x00,
-            Status::Busy => 0x01,
-            Status::Success => 0x02,
-            Status::Failure => 0x03,
-            Status::NoResponseOrTimeout => 0x04,
-            Status::NotSupported => 0x05,
-        }
-    }
 }
 
 impl TryFrom<u8> for Status {
