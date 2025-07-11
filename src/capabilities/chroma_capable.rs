@@ -13,8 +13,6 @@ pub trait ChromaCapable: RazerDevice {
 
         self.send_report(report)
     }
-
-    //TODO: All Chroma capabilities
 }
 
 impl ChromaCapable for Firefly {}

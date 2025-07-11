@@ -1,3 +1,8 @@
+use rusb::{
+    constants::{LIBUSB_REQUEST_CLEAR_FEATURE, LIBUSB_REQUEST_SET_CONFIGURATION},
+    request_type,
+};
+
 use crate::{
     device::usb_device::USBDevice,
     protocol::razer_report::{RazerReport, RZ_REPORT_LEN},
@@ -23,18 +28,36 @@ pub trait RazerDevice {
     fn send_report(&mut self, report: RazerReport) -> Result<()> {
         let data: [u8; RZ_REPORT_LEN] = report.into();
 
-        //TODO: Use more idiomatic constants.
-        self.usb_device()
-            .write_control(0x21, 0x09, 0x300, 0x00, &data, CONTROL_REPORT_TIMEOUT)?;
+        //TODO: Use more idiomatic constants for wValue and wIndex.
+        self.usb_device().write_control(
+            request_type(
+                rusb::Direction::Out,
+                rusb::RequestType::Class,
+                rusb::Recipient::Interface,
+            ),
+            LIBUSB_REQUEST_SET_CONFIGURATION,
+            0x300,
+            0x00,
+            &data,
+            CONTROL_REPORT_TIMEOUT,
+        )?;
 
         Ok(())
     }
 
     fn read_report(&mut self) -> Result<RazerReport> {
-        //TODO: Use more idiomatic constants.
-        let buf: Vec<u8> =
-            self.usb_device()
-                .read_control(0xa1, 0x01, 0x300, 0x00, CONTROL_REPORT_TIMEOUT)?;
+        //TODO: Use more idiomatic constants for wValue and wIndex.
+        let buf: Vec<u8> = self.usb_device().read_control(
+            request_type(
+                rusb::Direction::In,
+                rusb::RequestType::Class,
+                rusb::Recipient::Interface,
+            ),
+            LIBUSB_REQUEST_CLEAR_FEATURE,
+            0x300,
+            0x00,
+            CONTROL_REPORT_TIMEOUT,
+        )?;
 
         //TODO: Sort out buffer messiness
         let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
