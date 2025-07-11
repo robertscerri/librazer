@@ -1,8 +1,13 @@
+use crate::{
+    protocol::status::Status,
+    utils::errors::{Error, Result},
+};
+
 pub const RZ_REPORT_LEN: usize = 90;
 
 #[derive(Debug)]
 pub struct ReportHeader {
-    status: u8,
+    status: Status,
     transaction_id: u8,
     remaining_packets: u16,
     protocol_type: u8,
@@ -20,7 +25,7 @@ pub struct RazerReport {
 //TODO: Use more idiomatic constants
 impl RazerReport {
     pub fn new(
-        status: u8,
+        status: Status,
         transaction_id: u8,
         remaining_packets: u16,
         data_size: u8,
@@ -46,7 +51,7 @@ impl From<&RazerReport> for [u8; RZ_REPORT_LEN] {
     fn from(report: &RazerReport) -> Self {
         let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
 
-        data[0] = report.header.status;
+        data[0] = report.header.status.as_u8();
         data[1] = report.header.transaction_id;
 
         //Big Endian conversion
@@ -72,21 +77,23 @@ impl From<RazerReport> for [u8; RZ_REPORT_LEN] {
     }
 }
 
-impl From<[u8; RZ_REPORT_LEN]> for RazerReport {
-    fn from(data: [u8; RZ_REPORT_LEN]) -> Self {
+impl TryFrom<[u8; RZ_REPORT_LEN]> for RazerReport {
+    type Error = Error;
+
+    fn try_from(data: [u8; RZ_REPORT_LEN]) -> Result<Self> {
         let mut arguments: [u8; 80] = [0; 80];
         arguments.copy_from_slice(&data[8..(RZ_REPORT_LEN - 2)]);
 
         //TODO: Protocol type
-        RazerReport::new(
-            data[0],
+        Ok(RazerReport::new(
+            data[0].try_into()?,
             data[1],
             u16::from_be_bytes([data[2], data[3]]),
             data[5],
             data[6],
             data[7],
             arguments,
-        )
+        ))
     }
 }
 
