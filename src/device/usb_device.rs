@@ -96,16 +96,15 @@ impl USBDevice {
         request: u8,
         value: u16,
         index: u16,
+        length: usize,
         timeout: Duration,
     ) -> Result<Vec<u8>> {
-        //TODO: Sort out buf size shenanigans
         if let Some(handle) = &self.handle {
-            let mut buf: [u8; 90] = [0; 90];
+            let mut buf = vec![0; length];
 
-            let _read_len =
-                handle.read_control(request_type, request, value, index, &mut buf, timeout)?;
+            handle.read_control(request_type, request, value, index, &mut buf, timeout)?;
 
-            Ok(buf.to_vec())
+            Ok(buf)
         } else {
             Err(USBError::DeviceNotOpen {
                 vid: self.vendor_id,

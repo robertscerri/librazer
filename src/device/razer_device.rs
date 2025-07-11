@@ -56,6 +56,7 @@ pub trait RazerDevice {
             LIBUSB_REQUEST_CLEAR_FEATURE,
             0x300,
             0x00,
+            RZ_REPORT_LEN,
             CONTROL_REPORT_TIMEOUT,
         )?;
 
