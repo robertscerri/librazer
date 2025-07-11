@@ -66,9 +66,11 @@ impl From<&RazerReport> for [u8; RZ_REPORT_LEN] {
         data[6] = report.header.command_class;
         data[7] = report.header.command_id;
 
-        //TODO: Any way to make this cleaner?
-        let arguments_dest = &mut data[8..(8 + report.arguments.len())];
-        arguments_dest.copy_from_slice(&report.arguments);
+        //Truncate more than 80 elements to comply with RZ_REPORT_LEN
+        let arguments = report.arguments[0..report.arguments.len().min(80)].to_vec();
+
+        let arguments_dest = &mut data[8..(8 + arguments.len())];
+        arguments_dest.copy_from_slice(&arguments);
 
         data[RZ_REPORT_LEN - 2] = compute_crc(&data);
 
