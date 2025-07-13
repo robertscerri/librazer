@@ -1,10 +1,11 @@
 use razer::{
     capabilities::{chroma_capable::ChromaCapable, rechargable::Rechargable},
-    device::razer_device::{DeathAdderV3ProWireless, Firefly, RazerDevice},
+    device::razer_device::{BlackWidowChromaV2, DeathAdderV3ProWireless, Firefly, RazerDevice},
 };
 
 pub fn main() {
-    dim_brightness_firefly();
+    // dim_brightness_firefly();
+    dim_brightness_blackwidow();
 }
 
 fn dim_brightness_firefly() {
@@ -12,8 +13,9 @@ fn dim_brightness_firefly() {
     device.open().unwrap();
 
     println!(
-        "Connected to Razer Firefly (PID: {:#06X})",
-        device.usb_device().product_id()
+        "Connected to Razer Firefly (PID: {:#06X}, Interface: {:#04X})",
+        device.usb_device().product_id(),
+        device.interface_index()
     );
 
     device.set_brightness(0.2).unwrap();
@@ -22,6 +24,24 @@ fn dim_brightness_firefly() {
 
     device.close().unwrap();
     println!("Closed connection with Razer Firefly");
+}
+
+fn dim_brightness_blackwidow() {
+    let mut device = BlackWidowChromaV2::new();
+    device.open().unwrap();
+
+    println!(
+        "Connected to Razer BlackWidow Chroma V2 (PID: {:#06X}, Interface: {:#04X})",
+        device.usb_device().product_id(),
+        device.interface_index()
+    );
+
+    device.set_brightness(0.2).unwrap();
+    std::thread::sleep(std::time::Duration::new(2, 0));
+    device.set_brightness(1.0).unwrap();
+
+    device.close().unwrap();
+    println!("Closed connection with Razer BlackWidow Chroma V2");
 }
 
 fn read_deathadder_battery() {

@@ -15,20 +15,27 @@ const CONTROL_REPORT_TIMEOUT: std::time::Duration = std::time::Duration::from_mi
 pub trait RazerDevice {
     fn usb_device(&mut self) -> &mut USBDevice;
 
+    fn interface_index(&self) -> u8;
+
     fn open(&mut self) -> Result<()> {
-        //TODO: Claim interface here, see legacy code for reference.
-        self.usb_device().open()
+        self.usb_device().open()?;
+
+        let iface = self.interface_index();
+        self.usb_device().claim_interface(iface)?;
+
+        Ok(())
     }
 
     fn close(&mut self) -> Result<()> {
-        //TODO: Release interface here, see legacy code for reference.
+        //Interfaces will be released by USBDevice.close() code.
         self.usb_device().close()
     }
 
     fn send_report(&mut self, report: RazerReport) -> Result<()> {
         let data: [u8; RZ_REPORT_LEN] = report.into();
+        let index: u16 = self.interface_index().into();
 
-        //TODO: Use more idiomatic constants for wValue and wIndex.
+        //TODO: Use more idiomatic constants for wValue.
         self.usb_device().write_control(
             request_type(
                 rusb::Direction::Out,
@@ -37,7 +44,7 @@ pub trait RazerDevice {
             ),
             LIBUSB_REQUEST_SET_CONFIGURATION,
             0x300,
-            0x00,
+            index,
             &data,
             CONTROL_REPORT_TIMEOUT,
         )?;
@@ -46,7 +53,9 @@ pub trait RazerDevice {
     }
 
     fn read_report(&mut self) -> Result<RazerReport> {
-        //TODO: Use more idiomatic constants for wValue and wIndex.
+        let index: u16 = self.interface_index().into();
+
+        //TODO: Use more idiomatic constants for wValue.
         let buf: Vec<u8> = self.usb_device().read_control(
             request_type(
                 rusb::Direction::In,
@@ -55,7 +64,7 @@ pub trait RazerDevice {
             ),
             LIBUSB_REQUEST_CLEAR_FEATURE,
             0x300,
-            0x00,
+            index,
             RZ_REPORT_LEN,
             CONTROL_REPORT_TIMEOUT,
         )?;
@@ -76,6 +85,8 @@ macro_rules! define_razer_device {
         $(
             $name: ident {
                 product_id: $product_id:expr
+                $(, interface_index: $interface_index:expr)?
+                $(,)?
             }
         ),* $(,)?
     ) => {
@@ -105,9 +116,16 @@ macro_rules! define_razer_device {
                 fn usb_device(&mut self) -> &mut USBDevice {
                     &mut self.usb_device
                 }
+
+                fn interface_index(&self) -> u8 {
+                    define_razer_device!(@unwrap_iface $($interface_index)?)
+                }
             }
         )*
-    }
+    };
+
+    (@unwrap_iface $iface:expr) => {$iface};
+    (@unwrap_iface) => {0x00};
 }
 
 define_razer_device!(
@@ -226,7 +244,10 @@ define_razer_device!(
     OrnataChroma { product_id: 0x021E },
     Ornata { product_id: 0x021F },
     BladeStealthLate2016 { product_id: 0x0220 },
-    BlackWidowChromaV2 { product_id: 0x0221 },
+    BlackWidowChromaV2 {
+        product_id: 0x0221,
+        interface_index: 0x02
+    },
     BladeLate2016 { product_id: 0x0224 },
     BladePro2017 { product_id: 0x0225 },
     HuntsmanElite { product_id: 0x0226 },

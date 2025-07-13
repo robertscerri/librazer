@@ -1,5 +1,5 @@
 use crate::{
-    device::razer_device::{Firefly, RazerDevice},
+    device::razer_device::{BlackWidowChromaV2, Firefly, RazerDevice},
     protocol::{razer_report::RazerReport, status::Status},
     utils::errors::Result,
 };
@@ -16,3 +16,4 @@ pub trait ChromaCapable: RazerDevice {
 }
 
 impl ChromaCapable for Firefly {}
+impl ChromaCapable for BlackWidowChromaV2 {}

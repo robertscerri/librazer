@@ -1,4 +1,4 @@
-use std::time::Duration;
+use std::{collections::HashSet, time::Duration};
 
 use rusb::{Context, Device, DeviceHandle, UsbContext};
 
@@ -9,6 +9,7 @@ pub struct USBDevice {
     vendor_id: u16,
     product_id: u16,
     handle: Option<DeviceHandle<Context>>,
+    claimed_interfaces: HashSet<u8>,
 }
 
 impl USBDevice {
@@ -17,6 +18,7 @@ impl USBDevice {
             vendor_id,
             product_id,
             handle: None,
+            claimed_interfaces: HashSet::new(),
         }
     }
 
@@ -44,6 +46,8 @@ impl USBDevice {
                 let handle = device.open()?;
                 self.handle = Some(handle);
 
+                self.claimed_interfaces.clear();
+
                 Ok(())
             }
             None => Err(USBError::DeviceNotFound {
@@ -55,18 +59,48 @@ impl USBDevice {
     }
 
     pub fn close(&mut self) -> Result<()> {
-        match &self.handle {
-            Some(_) => {
-                //TODO: Write device close code here (release interfaces?)
-                self.handle = None;
-
-                Ok(())
+        if self.handle.is_some() {
+            for iface in &self.claimed_interfaces {
+                let _ = self.release_interface(*iface);
             }
-            None => Err(USBError::DeviceNotOpen {
+
+            self.handle = None;
+
+            Ok(())
+        } else {
+            Err(USBError::DeviceNotOpen {
                 vid: self.vendor_id,
                 pid: self.product_id,
             }
-            .into()),
+            .into())
+        }
+    }
+
+    pub fn claim_interface(&self, iface: u8) -> Result<()> {
+        if let Some(handle) = &self.handle {
+            handle.claim_interface(iface)?;
+
+            Ok(())
+        } else {
+            Err(USBError::DeviceNotOpen {
+                vid: self.vendor_id,
+                pid: self.product_id,
+            }
+            .into())
+        }
+    }
+
+    pub fn release_interface(&self, iface: u8) -> Result<()> {
+        if let Some(handle) = &self.handle {
+            handle.release_interface(iface)?;
+
+            Ok(())
+        } else {
+            Err(USBError::DeviceNotOpen {
+                vid: self.vendor_id,
+                pid: self.product_id,
+            }
+            .into())
         }
     }
 
