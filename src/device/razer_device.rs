@@ -20,6 +20,8 @@ pub trait RazerDevice {
     fn open(&mut self) -> Result<()> {
         self.usb_device().open()?;
 
+        //Older version of code gave error when claiming an interface on macOS, however code functioned as intended without claim.
+        //This may need to be omitted for macOS builds.
         let iface = self.interface_index();
         self.usb_device().claim_interface(iface)?;
 
