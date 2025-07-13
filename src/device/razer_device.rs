@@ -37,7 +37,6 @@ pub trait RazerDevice {
         let data: [u8; RZ_REPORT_LEN] = report.into();
         let index: u16 = self.interface_index().into();
 
-        //TODO: Use more idiomatic constants for wValue.
         self.usb_device().write_control(
             request_type(
                 rusb::Direction::Out,
@@ -57,7 +56,6 @@ pub trait RazerDevice {
     fn read_report(&mut self) -> Result<RazerReport> {
         let index: u16 = self.interface_index().into();
 
-        //TODO: Use more idiomatic constants for wValue.
         let buf: Vec<u8> = self.usb_device().read_control(
             request_type(
                 rusb::Direction::In,
