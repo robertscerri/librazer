@@ -4,7 +4,7 @@ use razer::{
 };
 
 pub fn main() {
-    read_deathadder_battery();
+    dim_brightness_firefly();
 }
 
 fn dim_brightness_firefly() {
