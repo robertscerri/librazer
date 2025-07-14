@@ -68,7 +68,6 @@ pub trait RazerDevice {
             CONTROL_REPORT_TIMEOUT,
         )?;
 
-        //TODO: Sort out buffer messiness
         let mut data: [u8; RZ_REPORT_LEN] = [0; RZ_REPORT_LEN];
         data[0..RZ_REPORT_LEN].copy_from_slice(buf.as_slice());
 

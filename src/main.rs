@@ -1,12 +1,15 @@
 use razer::{
-    capabilities::{chroma_capable::ChromaCapable, rechargable::Rechargable},
+    capabilities::{
+        adjustable_dpi::AdjustableDPI, chroma_capable::ChromaCapable, rechargable::Rechargable,
+    },
     device::razer_device::{BlackWidowChromaV2, DeathAdderV3ProWireless, Firefly, RazerDevice},
 };
 
 pub fn main() {
-    dim_brightness_firefly();
+    // dim_brightness_firefly();
     // dim_brightness_blackwidow();
     // read_deathadder_battery();
+    read_deathadder_dpi();
 }
 
 fn dim_brightness_firefly() {
@@ -56,6 +59,22 @@ fn read_deathadder_battery() {
 
     let battery = mouse.get_battery_level().unwrap();
     println!("Battery at: {:.2}%", battery * 100.0);
+
+    mouse.close().unwrap();
+    println!("Closed connection with Razer DeathAdder V3 Pro Wireless");
+}
+
+fn read_deathadder_dpi() {
+    let mut mouse = DeathAdderV3ProWireless::new();
+    mouse.open().unwrap();
+
+    println!(
+        "Connected to Razer DeathAdder V3 Pro Wireless (PID: {:#06X})",
+        mouse.usb_device().product_id()
+    );
+
+    let dpi = mouse.get_dpi().unwrap();
+    println!("DPI (x, y): ({}, {})", dpi.0, dpi.1);
 
     mouse.close().unwrap();
     println!("Closed connection with Razer DeathAdder V3 Pro Wireless");
