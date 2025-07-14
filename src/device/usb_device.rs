@@ -60,8 +60,10 @@ impl USBDevice {
 
     pub fn close(&mut self) -> Result<()> {
         if self.handle.is_some() {
-            for iface in &self.claimed_interfaces {
-                let _ = self.release_interface(*iface);
+            let claimed_interfaces = self.claimed_interfaces.clone();
+
+            for iface in claimed_interfaces {
+                let _ = self.release_interface(iface);
             }
 
             self.handle = None;
@@ -76,9 +78,11 @@ impl USBDevice {
         }
     }
 
-    pub fn claim_interface(&self, iface: u8) -> Result<()> {
+    pub fn claim_interface(&mut self, iface: u8) -> Result<()> {
         if let Some(handle) = &self.handle {
             handle.claim_interface(iface)?;
+
+            self.claimed_interfaces.insert(iface);
 
             Ok(())
         } else {
@@ -90,9 +94,11 @@ impl USBDevice {
         }
     }
 
-    pub fn release_interface(&self, iface: u8) -> Result<()> {
+    pub fn release_interface(&mut self, iface: u8) -> Result<()> {
         if let Some(handle) = &self.handle {
             handle.release_interface(iface)?;
+
+            self.claimed_interfaces.remove(&iface);
 
             Ok(())
         } else {
