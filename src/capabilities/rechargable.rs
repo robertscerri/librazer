@@ -8,6 +8,7 @@ pub trait Rechargable: RazerDevice {
     fn get_battery_level(&mut self) -> Result<f32> {
         let params: Vec<u8> = vec![0x00, 0x00];
 
+        //TODO: Device-specific transaction ID
         //TODO: Use more idiomatic constants
         let report = RazerReport::new(Status::NewCommand, 0x1f, 0x00, 0x07, 0x80, params);
 

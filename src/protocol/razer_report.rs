@@ -1,9 +1,7 @@
 use crate::{
-    protocol::status::Status,
+    protocol::{constants::RZ_REPORT_LEN, status::Status},
     utils::errors::{Error, Result},
 };
-
-pub const RZ_REPORT_LEN: usize = 90;
 
 #[derive(Debug)]
 pub struct ReportHeader {
@@ -22,7 +20,6 @@ pub struct RazerReport {
     pub arguments: Vec<u8>,
 }
 
-//TODO: Use more idiomatic constants
 impl RazerReport {
     pub fn new(
         status: Status,

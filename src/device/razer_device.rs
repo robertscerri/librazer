@@ -4,9 +4,8 @@ use rusb::{
 };
 
 use crate::{
-    device::usb_device::USBDevice,
-    protocol::razer_report::{RazerReport, RZ_REPORT_LEN},
-    utils::errors::Result,
+    device::usb_device::USBDevice, protocol::constants::RZ_REPORT_LEN,
+    protocol::razer_report::RazerReport, utils::errors::Result,
 };
 
 const RAZER_VENDOR_ID: u16 = 0x1532;
