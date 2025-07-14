@@ -39,3 +39,54 @@ pub enum LedDefinitions {
     FastCharging = 0x21,
     FullyCharged = 0x22,
 }
+
+#[derive(Debug, Clone, Copy)]
+#[repr(u8)]
+pub enum MatrixEffect {
+    Off,
+    Wave(WaveDirection),
+    Reactive(ReactiveSpeed, RGB),
+    Breathing,
+    Spectrum,
+    Custom,
+    Static(RGB),
+    Starlight,
+}
+
+impl From<MatrixEffect> for u8 {
+    fn from(value: MatrixEffect) -> Self {
+        match value {
+            MatrixEffect::Off => 0x00,
+            MatrixEffect::Wave(_) => 0x01,
+            MatrixEffect::Reactive(_, _) => 0x02,
+            MatrixEffect::Breathing => 0x03, //TODO: Implement effect.
+            MatrixEffect::Spectrum => 0x04,
+            MatrixEffect::Custom => 0x05, //TODO: Implement effect.
+            MatrixEffect::Static(_) => 0x06,
+            MatrixEffect::Starlight => 0x19, //TODO: Implement effect.
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+#[repr(u8)]
+pub enum WaveDirection {
+    Right = 0x01,
+    Left = 0x02,
+}
+
+#[derive(Debug, Clone, Copy)]
+#[repr(u8)]
+pub enum ReactiveSpeed {
+    Slowest,
+    Slow,
+    Fast,
+    Fastest,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub struct RGB {
+    pub r: u8,
+    pub g: u8,
+    pub b: u8,
+}
