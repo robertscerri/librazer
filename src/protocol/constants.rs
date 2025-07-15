@@ -46,7 +46,7 @@ pub enum MatrixEffect {
     Off,
     Wave(WaveDirection),
     Reactive(ReactiveSpeed, RGB),
-    Breathing,
+    Breathing(BreathingMode),
     Spectrum,
     Custom,
     Static(RGB),
@@ -59,7 +59,7 @@ impl From<MatrixEffect> for u8 {
             MatrixEffect::Off => 0x00,
             MatrixEffect::Wave(_) => 0x01,
             MatrixEffect::Reactive(_, _) => 0x02,
-            MatrixEffect::Breathing => 0x03, //TODO: Implement effect.
+            MatrixEffect::Breathing(_) => 0x03,
             MatrixEffect::Spectrum => 0x04,
             MatrixEffect::Custom => 0x05, //TODO: Implement effect.
             MatrixEffect::Static(_) => 0x06,
@@ -89,4 +89,21 @@ pub struct RGB {
     pub r: u8,
     pub g: u8,
     pub b: u8,
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum BreathingMode {
+    Single(RGB),
+    Dual(RGB, RGB),
+    Random,
+}
+
+impl From<BreathingMode> for u8 {
+    fn from(value: BreathingMode) -> Self {
+        match value {
+            BreathingMode::Single(_) => 0x01,
+            BreathingMode::Dual(_, _) => 0x02,
+            BreathingMode::Random => 0x03,
+        }
+    }
 }

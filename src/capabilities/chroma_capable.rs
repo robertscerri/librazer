@@ -36,6 +36,26 @@ pub trait ChromaCapable: RazerDevice {
                 params.push(colour.g);
                 params.push(colour.b);
             }
+            MatrixEffect::Breathing(mode) => {
+                params.push(mode.into());
+
+                match mode {
+                    crate::protocol::constants::BreathingMode::Single(colour) => {
+                        params.push(colour.r);
+                        params.push(colour.g);
+                        params.push(colour.b);
+                    }
+                    crate::protocol::constants::BreathingMode::Dual(colour1, colour2) => {
+                        params.push(colour1.r);
+                        params.push(colour1.g);
+                        params.push(colour1.b);
+                        params.push(colour2.r);
+                        params.push(colour2.g);
+                        params.push(colour2.b);
+                    }
+                    crate::protocol::constants::BreathingMode::Random => {}
+                }
+            }
             MatrixEffect::Static(colour) => {
                 params.push(colour.r);
                 params.push(colour.g);
