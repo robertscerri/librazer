@@ -3,7 +3,7 @@ use razer::{
         adjustable_dpi::AdjustableDPI, chroma_capable::ChromaCapable, rechargable::Rechargable,
     },
     device::razer_device::{BlackWidowChromaV2, DeathAdderV3ProWireless, Firefly, RazerDevice},
-    protocol::constants::{MatrixEffect, RGB},
+    protocol::constants::MatrixEffect,
 };
 
 pub fn main() {
@@ -61,13 +61,6 @@ fn cycle_effects_blackwidow() {
     );
 
     device.set_effect(MatrixEffect::Off).unwrap();
-    std::thread::sleep(std::time::Duration::new(2, 0));
-    device
-        .set_effect(MatrixEffect::Starlight(
-            razer::protocol::constants::StarlightMode::Single(RGB { r: 255, g: 0, b: 0 }),
-            razer::protocol::constants::StarlightSpeed::Medium,
-        ))
-        .unwrap();
     std::thread::sleep(std::time::Duration::new(2, 0));
     device.set_effect(MatrixEffect::Spectrum).unwrap();
 

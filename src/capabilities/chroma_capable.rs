@@ -5,7 +5,7 @@ use crate::{
         razer_report::RazerReport,
         status::Status,
     },
-    utils::errors::Result,
+    utils::errors::{Error, Result},
 };
 
 pub trait ChromaCapable: RazerDevice {
@@ -48,6 +48,9 @@ pub trait ChromaCapable: RazerDevice {
                     BreathingMode::Random => {}
                 }
             }
+            MatrixEffect::Static(colour) => {
+                params.extend([colour.r, colour.g, colour.b]);
+            }
             MatrixEffect::Starlight(mode, speed) => {
                 params.extend([mode.into(), speed as u8]);
 
@@ -63,9 +66,7 @@ pub trait ChromaCapable: RazerDevice {
                     StarlightMode::Random => {}
                 }
             }
-            MatrixEffect::Static(colour) => {
-                params.extend([colour.r, colour.g, colour.b]);
-            }
+            MatrixEffect::Custom => return Err(Error::UnsupportedOperation),
             _ => {}
         }
 

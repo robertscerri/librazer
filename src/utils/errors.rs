@@ -6,6 +6,8 @@ pub enum Error {
     Usb(#[from] USBError),
     #[error("Prtocol error: {0}")]
     Protocol(#[from] ProtcolError),
+    #[error("Unsupported Operation")]
+    UnsupportedOperation,
 }
 
 #[derive(Debug, Error)]
