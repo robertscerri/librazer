@@ -75,6 +75,15 @@ pub trait RazerDevice {
 
         Ok(report)
     }
+
+    fn exchange_report(&mut self, report: RazerReport) -> Result<RazerReport> {
+        self.send_report(report)?;
+
+        //TODO: Find reasoning behind seemingly arbitrary sleep length
+        std::thread::sleep(std::time::Duration::from_micros(3100));
+
+        self.read_report()
+    }
 }
 
 //Device definitions
