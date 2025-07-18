@@ -25,6 +25,7 @@ pub trait ChromaCapable: RazerDevice {
         self.send_report(report)
     }
 
+    //TODO: Ensure devices only expose effects which they actually support
     fn set_effect(&mut self, effect: MatrixEffect) -> Result<()> {
         let mut params: Vec<u8> = vec![effect.into()];
 
