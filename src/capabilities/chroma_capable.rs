@@ -1,7 +1,7 @@
 use crate::{
     device::razer_device::{BlackWidowChromaV2, Firefly, RazerDevice},
     protocol::{
-        constants::{LedDefinitions, LedStorage, MatrixEffect},
+        constants::{BreathingMode, LedDefinitions, LedStorage, MatrixEffect, StarlightMode},
         razer_report::RazerReport,
         status::Status,
     },
@@ -31,35 +31,40 @@ pub trait ChromaCapable: RazerDevice {
         match effect {
             MatrixEffect::Wave(wave_direction) => params.push(wave_direction as u8),
             MatrixEffect::Reactive(speed, colour) => {
-                params.push(speed as u8);
-                params.push(colour.r);
-                params.push(colour.g);
-                params.push(colour.b);
+                params.extend([speed as u8, colour.r, colour.g, colour.b]);
             }
             MatrixEffect::Breathing(mode) => {
                 params.push(mode.into());
 
                 match mode {
-                    crate::protocol::constants::BreathingMode::Single(colour) => {
-                        params.push(colour.r);
-                        params.push(colour.g);
-                        params.push(colour.b);
+                    BreathingMode::Single(colour) => {
+                        params.extend([colour.r, colour.g, colour.b]);
                     }
-                    crate::protocol::constants::BreathingMode::Dual(colour1, colour2) => {
-                        params.push(colour1.r);
-                        params.push(colour1.g);
-                        params.push(colour1.b);
-                        params.push(colour2.r);
-                        params.push(colour2.g);
-                        params.push(colour2.b);
+                    BreathingMode::Dual(colour1, colour2) => {
+                        params.extend([
+                            colour1.r, colour1.g, colour1.b, colour2.r, colour2.g, colour2.b,
+                        ]);
                     }
-                    crate::protocol::constants::BreathingMode::Random => {}
+                    BreathingMode::Random => {}
+                }
+            }
+            MatrixEffect::Starlight(mode, speed) => {
+                params.extend([mode.into(), speed as u8]);
+
+                match mode {
+                    StarlightMode::Single(colour) => {
+                        params.extend([colour.r, colour.g, colour.b]);
+                    }
+                    StarlightMode::Dual(colour1, colour2) => {
+                        params.extend([
+                            colour1.r, colour1.g, colour1.b, colour2.r, colour2.g, colour2.b,
+                        ]);
+                    }
+                    StarlightMode::Random => {}
                 }
             }
             MatrixEffect::Static(colour) => {
-                params.push(colour.r);
-                params.push(colour.g);
-                params.push(colour.b);
+                params.extend([colour.r, colour.g, colour.b]);
             }
             _ => {}
         }

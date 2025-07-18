@@ -50,7 +50,7 @@ pub enum MatrixEffect {
     Spectrum,
     Custom,
     Static(RGB),
-    Starlight,
+    Starlight(StarlightMode, StarlightSpeed),
 }
 
 impl From<MatrixEffect> for u8 {
@@ -63,7 +63,7 @@ impl From<MatrixEffect> for u8 {
             MatrixEffect::Spectrum => 0x04,
             MatrixEffect::Custom => 0x05, //TODO: Implement effect.
             MatrixEffect::Static(_) => 0x06,
-            MatrixEffect::Starlight => 0x19, //TODO: Implement effect.
+            MatrixEffect::Starlight(_, _) => 0x19,
         }
     }
 }
@@ -78,10 +78,10 @@ pub enum WaveDirection {
 #[derive(Debug, Clone, Copy)]
 #[repr(u8)]
 pub enum ReactiveSpeed {
-    Slowest,
-    Slow,
-    Fast,
-    Fastest,
+    Fastest = 0x01,
+    Fast = 0x02,
+    Slow = 0x03,
+    Slowest = 0x04,
 }
 
 #[derive(Debug, Clone, Copy)]
@@ -106,4 +106,29 @@ impl From<BreathingMode> for u8 {
             BreathingMode::Random => 0x03,
         }
     }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum StarlightMode {
+    Single(RGB),
+    Dual(RGB, RGB),
+    Random,
+}
+
+impl From<StarlightMode> for u8 {
+    fn from(value: StarlightMode) -> Self {
+        match value {
+            StarlightMode::Single(_) => 0x01,
+            StarlightMode::Dual(_, _) => 0x02,
+            StarlightMode::Random => 0x03,
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+#[repr(u8)]
+pub enum StarlightSpeed {
+    Fast = 0x01,
+    Medium = 0x02,
+    Slow = 0x03,
 }

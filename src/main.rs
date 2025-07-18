@@ -62,6 +62,13 @@ fn cycle_effects_blackwidow() {
 
     device.set_effect(MatrixEffect::Off).unwrap();
     std::thread::sleep(std::time::Duration::new(2, 0));
+    device
+        .set_effect(MatrixEffect::Starlight(
+            razer::protocol::constants::StarlightMode::Single(RGB { r: 255, g: 0, b: 0 }),
+            razer::protocol::constants::StarlightSpeed::Medium,
+        ))
+        .unwrap();
+    std::thread::sleep(std::time::Duration::new(2, 0));
     device.set_effect(MatrixEffect::Spectrum).unwrap();
 
     device.close().unwrap();
