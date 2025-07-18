@@ -6,16 +6,8 @@ use crate::{
 
 pub trait AdjustableDPI: RazerDevice {
     fn get_dpi(&mut self) -> Result<(u16, u16)> {
-        //TODO: Not really sure what's going on here
-        let params = vec![
-            LedStorage::NoStore as u8,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-            0x00,
-        ];
+        let mut params = vec![LedStorage::NoStore as u8];
+        params.resize(7, 0x00); //Required since device seems to respond with same length
 
         //TODO: Device-specific transaction ID
         //TODO: Use more idiomatic constants
@@ -34,6 +26,18 @@ pub trait AdjustableDPI: RazerDevice {
     }
 
     //TODO: DPI Stages?
+    // fn get_dpi_stages(&mut self) -> Result<()> {
+    //     let mut params = vec![LedStorage::VarStore as u8];
+    //     params.resize(0x26, 0x00);
+
+    //     let request = RazerReport::new(Status::NewCommand, 0x1F, 0x00, 0x04, 0x86, params);
+
+    //     let response = self.exchange_report(request)?;
+
+    //     println!("{response:?}");
+
+    //     todo!()
+    // }
 }
 
 impl AdjustableDPI for DeathAdderV3ProWireless {}
