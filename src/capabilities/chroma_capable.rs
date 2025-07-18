@@ -20,7 +20,7 @@ pub trait ChromaCapable: RazerDevice {
 
         //TODO: Device-specific transaction_id
         //TODO: Use more idiomatic constants
-        let report = RazerReport::new(Status::NewCommand, 0xff, 0x00, 0x03, 0x03, params);
+        let report = RazerReport::new(Status::NewCommand, 0xFF, 0x00, 0x03, 0x03, params);
 
         self.send_report(report)
     }
@@ -71,7 +71,7 @@ pub trait ChromaCapable: RazerDevice {
             _ => {}
         }
 
-        let report = RazerReport::new(Status::NewCommand, 0xff, 0x00, 0x03, 0x0A, params);
+        let report = RazerReport::new(Status::NewCommand, 0xFF, 0x00, 0x03, 0x0A, params);
 
         self.send_report(report)
     }

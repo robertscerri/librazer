@@ -19,7 +19,7 @@ pub trait AdjustableDPI: RazerDevice {
 
         //TODO: Device-specific transaction ID
         //TODO: Use more idiomatic constants
-        let request = RazerReport::new(Status::NewCommand, 0x1f, 0x00, 0x04, 0x85, params);
+        let request = RazerReport::new(Status::NewCommand, 0x1F, 0x00, 0x04, 0x85, params);
         let response = self.exchange_report(request)?;
 
         //TODO: Not all mice return DPI in this format
